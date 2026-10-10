@@ -1,0 +1,224 @@
+{
+  "seed": 20261009,
+  "runs": 1,
+  "slots": [
+    {
+      "pos": 0,
+      "task": "t1",
+      "mode": "webmcp",
+      "model": "haiku"
+    },
+    {
+      "pos": 1,
+      "task": "t3",
+      "mode": "ui",
+      "model": "opus"
+    },
+    {
+      "pos": 2,
+      "task": "t2",
+      "mode": "webmcp",
+      "model": "opus"
+    },
+    {
+      "pos": 3,
+      "task": "t2",
+      "mode": "ui",
+      "model": "haiku"
+    },
+    {
+      "pos": 4,
+      "task": "t1",
+      "mode": "ui",
+      "model": "haiku"
+    },
+    {
+      "pos": 5,
+      "task": "t2",
+      "mode": "webmcp",
+      "model": "haiku"
+    },
+    {
+      "pos": 6,
+      "task": "t3",
+      "mode": "ui",
+      "model": "haiku"
+    },
+    {
+      "pos": 7,
+      "task": "t3",
+      "mode": "webmcp",
+      "model": "opus"
+    },
+    {
+      "pos": 8,
+      "task": "t3",
+      "mode": "webmcp",
+      "model": "haiku"
+    },
+    {
+      "pos": 9,
+      "task": "t1",
+      "mode": "ui",
+      "model": "opus"
+    },
+    {
+      "pos": 10,
+      "task": "t2",
+      "mode": "ui",
+      "model": "opus"
+    },
+    {
+      "pos": 11,
+      "task": "t1",
+      "mode": "webmcp",
+      "model": "opus"
+    }
+  ],
+  "attempts": [
+    {
+      "id": "d3d825f9-33b9-4c21-9481-93b4b7d88a4c",
+      "pos": 0,
+      "dir": "000-t1-webmcp-haiku-d3d825f9",
+      "task": "t1",
+      "mode": "webmcp",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.000876075,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "273b0894-2bf9-4c3c-b225-058198436865",
+      "pos": 1,
+      "dir": "001-t3-ui-opus-273b0894",
+      "task": "t3",
+      "mode": "ui",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.2723434,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "b4fe0a45-5975-4d34-b142-c9da9a3c08ae",
+      "pos": 2,
+      "dir": "002-t2-webmcp-opus-b4fe0a45",
+      "task": "t2",
+      "mode": "webmcp",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.037852,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "97e293df-d2e6-4193-a3cd-725a1b532bf4",
+      "pos": 3,
+      "dir": "003-t2-ui-haiku-97e293df",
+      "task": "t2",
+      "mode": "ui",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.004865555000000001,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "5d477d9d-d547-4bad-a7bc-f5cea961c179",
+      "pos": 4,
+      "dir": "004-t1-ui-haiku-5d477d9d",
+      "task": "t1",
+      "mode": "ui",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.002573245,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "5e4e5437-c8c1-4b0b-ba9d-458b2daf85ec",
+      "pos": 5,
+      "dir": "005-t2-webmcp-haiku-5e4e5437",
+      "task": "t2",
+      "mode": "webmcp",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.0009455199999999999,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "cd3b9eea-6333-4f7a-ba8a-38ec327a7e2f",
+      "pos": 6,
+      "dir": "006-t3-ui-haiku-cd3b9eea",
+      "task": "t3",
+      "mode": "ui",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.014696269999999999,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "f3568a16-0577-412a-8336-1261116acf96",
+      "pos": 7,
+      "dir": "007-t3-webmcp-opus-f3568a16",
+      "task": "t3",
+      "mode": "webmcp",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.057233,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "9e6bd4ab-563f-43e3-a533-000468473f99",
+      "pos": 8,
+      "dir": "008-t3-webmcp-haiku-9e6bd4ab",
+      "task": "t3",
+      "mode": "webmcp",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.00199527,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "2eac156f-6814-410e-84b2-00a13f4fe04d",
+      "pos": 9,
+      "dir": "009-t1-ui-opus-2eac156f",
+      "task": "t1",
+      "mode": "ui",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.1252936,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "d7264e87-c6b8-4b38-b261-2ff276d2df3c",
+      "pos": 10,
+      "dir": "010-t2-ui-opus-d7264e87",
+      "task": "t2",
+      "mode": "ui",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.14712419999999998,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "8506fb68-9b71-4e35-b47a-219bc4a597dc",
+      "pos": 11,
+      "dir": "011-t1-webmcp-opus-8506fb68",
+      "task": "t1",
+      "mode": "webmcp",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.035950800000000005,
+      "unresolvedUsd": 0
+    }
+  ]
+}

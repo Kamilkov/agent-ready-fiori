@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent-ready Fiori</title>
+<style>
+  :root { color-scheme: light dark; --bg: #fff; --fg: #1d2d3e; --muted: #556b82; --line: #d9dee3; --ok: #256f3a; --bad: #aa0808; --card: #f5f6f7; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #12171c; --fg: #e4e8ec; --muted: #9aa8b5; --line: #2f3a45; --ok: #6cc788; --bad: #ff8a80; --card: #1b232b; } }
+  body { margin: 0 auto; max-width: 72rem; padding: 1rem; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+  a { color: inherit; }
+  .wide { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: .9rem; }
+  th, td { padding: .35rem .5rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; white-space: nowrap; }
+  .muted { color: var(--muted); } .pass { color: var(--ok); } .fail { color: var(--bad); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 50rem) { .pair { grid-template-columns: 1fr; } }
+  .turn { border: 1px solid var(--line); border-radius: .5rem; padding: .5rem; margin: .5rem 0; background: var(--card); overflow-wrap: anywhere; }
+  pre { white-space: pre-wrap; word-break: break-word; max-height: 20rem; overflow: auto; font-size: .8rem; }
+  img { max-width: 100%; border: 1px solid var(--line); }
+  code { font-size: .85rem; }
+</style>
+</head>
+<body>
+<h1>Agent-ready Fiori: what WebMCP changes for a browser agent</h1>
+<p>The same Claude agent does the same tasks in the same Fiori-style app, once through the page alone (accessibility snapshots, clicks and typing) and once with the four WebMCP tools the page registers. Every number below was measured, and every run's full trace is linked.</p>
+<div id="results">Loading the results…</div>
+<script>
+'use strict'
+const set = new URLSearchParams(location.search).get('set') || 'batch'
+const base = `../runs/${set}/`
+const TASKS = { t1: 'T1 · read only', t2: 'T2 · one change', t3: 'T3 · batch' }
+const MODELS = { opus: 'Opus 5.5', haiku: 'Haiku 5.5' }
+const MODES = { ui: 'UI only', webmcp: 'WebMCP' }
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag)
+  for (const [k, v] of Object.entries(attrs ?? {})) if (v != null && v !== false) e.setAttribute(k, v)
+  e.append(...kids.flat(Infinity).filter(k => k != null && k !== false && k !== ''))
+  return e
+}
+const num = n => Math.round(n).toLocaleString('en')
+const usd = n => (n == null ? 'N/A' : '$' + (n < 1 ? n.toFixed(3) : n.toFixed(2)))
+const range = (s, f = num) => `${f(s.median)} (${f(s.min)}–${f(s.max)})`
+const traceUrl = (s, dir) => (s.traceBase ? `${s.traceBase}${dir}/trace.json` : `${base}attempts/${dir}/trace.json`)
+const mark = status => ({ pass: '✓', fail: '✗' })[status] ?? '↻'
+
+function headline(s) {
+  const head = ['Task', 'Model', 'Mode', 'Success', 'Turns', 'Input tokens', 'Cache read', 'Cache write', 'Output tokens', 'Cost', 'Time (s)', 'Spend, all attempts', 'Spend per success', 'Traces']
+  const rows = s.cells.map(c => el('tr', {},
+    el('td', {}, TASKS[c.task]), el('td', {}, MODELS[c.model]), el('td', {}, MODES[c.mode]),
+    el('td', { class: c.successes ? 'pass' : 'fail' }, `${c.successes}/${c.counted}`),
+    c.stats
+      ? [...['turns', 'input', 'cacheRead', 'cacheWrite', 'output'].map(k => el('td', {}, range(c.stats[k]))),
+         el('td', {}, range(c.stats.costUsd, usd)), el('td', {}, range(c.stats.seconds))]
+      : el('td', { colspan: 7, class: 'muted' }, 'no successful runs'),
+    el('td', {}, usd(c.spendUsd), c.unresolvedUsd ? el('span', { class: 'muted' }, ` + ${usd(c.unresolvedUsd)} reserved`) : null),
+    el('td', {}, usd(c.spendPerSuccessUsd)),
+    el('td', {}, c.attempts.map(a => [el('a', { href: traceUrl(s, a.dir), title: a.reason ? `${a.status}: ${a.reason.split('\n')[0]}` : a.status }, `#${a.pos}${mark(a.status)}`), ' ']))))
+  return el('section', {}, el('h2', {}, 'Results'),
+    el('p', { class: 'muted' }, 'Success counts the counted attempts of each cell. Turns, tokens, cost and time cover successful runs only: median (min–max). Spend is the billed cost of every attempt, replaced ones included; a request that never got an answer has an unknown cost and is shown apart as reserved (its worst case). ✓ passed, ✗ failed, ↻ replaced after an infrastructure error.'),
+    el('div', { class: 'wide' }, el('table', {}, el('thead', {}, el('tr', {}, head.map(h => el('th', {}, h)))), el('tbody', {}, rows))))
+}
+
+function resultView(res, dir) {
+  const parts = typeof res.content === 'string' ? [{ type: 'text', text: res.content }] : res.content ?? []
+  return parts.map(p => (p.type === 'text' ? el('pre', {}, p.text)
+    : p.type === 'image' ? el('img', { src: `${base}attempts/${dir}/${p.file}`, alt: 'Image the model saw', loading: 'lazy' }) : null))
+}
+
+const firstLine = text => String(text ?? '').split('\n')[0]
+
+// One block per model turn. A turn can take several requests: tries the API refused (retried) and requests that got no
+// answer, listed before the answer. A turn's messages are the reply at 2·turn − 1 and the tool results at 2·turn.
+function turns(t, dir) {
+  const byTurn = new Map()
+  for (const r of t.requests ?? []) byTurn.set(r.turn, [...(byTurn.get(r.turn) ?? []), r])
+  let tokens = 0
+  return [...byTurn].map(([turn, tries]) => {
+    const answered = tries.find(r => r.usage)
+    if (answered) {
+      const u = answered.usage
+      tokens += u.input_tokens + u.cache_read_input_tokens + u.cache_creation_input_tokens + u.output_tokens
+    }
+    const asst = answered ? t.conversation[2 * turn - 1] : null, results = answered ? t.conversation[2 * turn] : null
+    const blocks = Array.isArray(asst?.content) ? asst.content : []
+    const calls = blocks.filter(b => b.type === 'tool_use')
+    const said = blocks.filter(b => b.type === 'text').map(b => b.text).join('\n')
+    const byId = new Map((Array.isArray(results?.content) ? results.content : []).map(b => [b.tool_use_id, b]))
+    return el('div', { class: 'turn' },
+      el('strong', {}, `Turn ${turn}`), el('span', { class: 'muted' }, ` · ${num(tokens)} tokens so far`),
+      tries.filter(r => !r.usage).map(r => el('p', { class: 'muted' }, r.charged === 'none'
+        ? `Request refused by the API and retried: ${firstLine(r.error)}`
+        : `Request without an answer (${firstLine(r.error) || 'the run stopped'}): ${usd(r.reservedUsd)} reserved, actual cost unknown`)),
+      said && el('p', {}, said),
+      calls.map(c => {
+        const res = byId.get(c.id)
+        return el('div', {}, el('code', {}, `${c.name}(${JSON.stringify(c.input)})`),
+          res ? el('details', {}, el('summary', { class: res.is_error ? 'fail' : 'muted' }, res.is_error ? 'error' : 'returned'), resultView(res, dir))
+            : el('span', { class: 'muted' }, ' · no result (the run ended)'))
+      }),
+      // The screenshot is taken once every call of the turn has returned.
+      calls.length && calls.every(c => byId.has(c.id)) ? el('figure', {},
+        el('img', { src: `${base}attempts/${dir}/shots/t${String(turn).padStart(2, '0')}.jpg`, alt: `The app after turn ${turn}`, loading: 'lazy' }),
+        el('figcaption', { class: 'muted' }, 'after these calls')) : null)
+  })
+}
+
+function replayColumn(s, c, mode) {
+  if (!c?.replay) return el('div', {}, el('h4', {}, MODES[mode]), el('p', { class: 'muted' }, 'Not run.'))
+  const a = c.attempts.find(x => x.dir === c.replay.dir)
+  const box = el('details', {}, el('summary', {}, 'Show the run'))
+  box.addEventListener('toggle', async () => {
+    if (!box.open || box.dataset.loaded) return
+    box.dataset.loaded = '1'
+    try {
+      const res = await fetch(`${base}attempts/${c.replay.dir}/trace.json`)
+      if (!res.ok) throw new Error(`trace.json: ${res.status}`)
+      box.append(...turns(await res.json(), c.replay.dir))
+    } catch (e) { box.append(el('p', { class: 'fail' }, `Could not load the trace: ${e.message}`)) }
+  })
+  return el('div', {},
+    el('h4', {}, `${MODES[mode]} `, el('span', { class: c.replay.failed ? 'fail' : 'pass' }, c.replay.failed ? `failed (${a?.reason?.split('\n')[0] ?? 'no successful runs'})` : 'passed')),
+    el('p', { class: 'muted' }, el('a', { href: traceUrl(s, c.replay.dir) }, 'Full trace')), box)
+}
+
+function replays(s) {
+  const section = el('section', {}, el('h2', {}, 'Replays'),
+    el('p', { class: 'muted' }, 'One run per cell: the successful run with the median number of turns (the lower one when the count is even; ties go to the earlier run). Without a successful run, the failed run chosen the same way.'))
+  for (const task of Object.keys(TASKS)) for (const model of Object.keys(MODELS)) {
+    const pair = ['ui', 'webmcp'].map(mode => s.cells.find(c => c.task === task && c.model === model && c.mode === mode))
+    if (pair.every(c => !c)) continue
+    section.append(el('h3', {}, `${TASKS[task]} · ${MODELS[model]}`), el('div', { class: 'pair' }, pair.map((c, i) => replayColumn(s, c, i ? 'webmcp' : 'ui'))))
+  }
+  return section
+}
+
+async function howItWorks() {
+  const code = await fetch('../app/webmcp.js').then(r => (r.ok ? r.text() : ''), () => '')
+  return el('section', {}, el('h2', {}, 'How it works'),
+    el('p', {}, 'One agent loop, one system prompt, the same browser tools in both modes. With WebMCP, Chrome also lists the page\'s tools, registered with document.modelContext.registerTool. Each tool runs the same code as the matching screen action, and errors come back as results, just as the screen shows them.'),
+    el('p', {}, el('a', { href: '../app/index.html' }, 'Open the app'), '. The WebMCP tools appear only in a Chrome with WebMCP turned on.'),
+    code && el('details', {}, el('summary', {}, 'app/webmcp.js, as the page runs it'), el('pre', {}, code)))
+}
+
+function caveats(s) {
+  const v = s.versions, list = xs => (xs?.length ? xs.join(', ') : 'unknown')
+  return el('section', {}, el('h2', {}, 'Caveats'), el('ul', {},
+    el('li', {}, 'WebMCP is a W3C Web Machine Learning Community Group draft, not a standard. Its API changed several times in 2026.'),
+    el('li', {}, `Chrome ${list(v.chrome)} with WebMCP turned on by a feature flag. UI-only runs use the same Chrome without it.`),
+    el('li', {}, 'We designed the app and its tools. Each tool does exactly what one screen action does, through the same code, but a different app could favour either mode.'),
+    el('li', {}, `${s.runsPerCell} runs per cell: enough to show a pattern, not to claim statistical significance.`),
+    el('li', {}, `Runs from ${s.dates.first?.slice(0, 10)} to ${s.dates.last?.slice(0, 10)}. Models: ${list(v.models)}, effort medium, adaptive thinking. chrome-devtools-mcp ${list(v.chromeDevtoolsMcp)}, @anthropic-ai/sdk ${list(v.anthropicSdk)}, Node ${list(v.node)}, UI5 1.136.8.`),
+    s.cacheLeaks.length ? el('li', { class: 'fail' }, `${s.cacheLeaks.length} attempts read from the prompt cache on their first request.`) : null))
+}
+
+;(async () => {
+  const root = document.getElementById('results')
+  try {
+    const res = await fetch(base + 'summary.json')
+    if (!res.ok) throw new Error(`summary.json: ${res.status}`)
+    const s = await res.json()
+    root.replaceChildren(headline(s), replays(s), await howItWorks(), caveats(s))
+  } catch (e) { root.textContent = `Could not load the results: ${e.message}` }
+})()
+</script>
+</body>
+</html>

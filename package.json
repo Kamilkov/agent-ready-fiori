@@ -1,0 +1,25 @@
+{
+  "name": "agent-ready-fiori",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "test": "node --test 'test/*.test.ts'",
+    "typecheck": "tsc --noEmit",
+    "probe": "node bench/probe.ts",
+    "smoke": "node bench/smoke.ts",
+    "serve": "node bench/serve.ts 8080"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.132.1",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "chrome-devtools-mcp": "1.10.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.4",
+    "typescript": "7.0.2"
+  },
+  "license": "MIT"
+}

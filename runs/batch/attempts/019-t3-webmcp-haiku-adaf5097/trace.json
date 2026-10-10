@@ -1,0 +1,608 @@
+{
+  "attemptId": "adaf5097-9b0c-4fa1-8396-241a95119f5f",
+  "position": 19,
+  "task": "t3",
+  "mode": "webmcp",
+  "model": "haiku",
+  "replaces": null,
+  "startedAt": "2026-10-10T07:11:21.898Z",
+  "versions": {
+    "node": "v26.8.2",
+    "anthropicSdk": "0.132.1",
+    "app": "800c5e5b7ec98f445aa12c99425b2cbc404ffdd1",
+    "chrome": "154.0.8037.98",
+    "chromeDevtoolsMcp": "1.10.1"
+  },
+  "outcome": {
+    "status": "pass",
+    "reason": null
+  },
+  "finalText": "All 8 passengers on cancelled flight ZX 400 (FRA–JFK) are rebooked, and each booking group is on one flight with its cabin kept.\n\n| Booking | Passengers | Cabin | Rebooked to |\n|---|---|---|---|\n| HZ4K7Q | Jan, Maja, Luka Horvat | 3 Economy | ZX 404 (Nov 3, 07:00) |\n| RS2M9D | Elena and Marco Rossi | 2 Business | ZX 406 (Nov 3, 10:00) |\n| NV8P2L | Anna Novak | 1 Economy | ZX 402 (Nov 2, 18:00) |\n| BG5J3R | Tom Berger | 1 Economy | ZX 402 (Nov 2, 18:00) |\n| LD9C6W | Sara Lind | 1 Business | ZX 402 (Nov 2, 18:00) |\n\nThe Horvat family did not fit on ZX 402, which had only 2 Economy seats, so they went to ZX 404. The Rossis did not fit on ZX 402 or ZX 404, so they went to ZX 406. ZX 402 now has its Economy and Business seats fully used.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Flight ZX 400 from Frankfurt (FRA) to New York (JFK) is cancelled. Rebook all of its passengers. Everyone keeps their cabin. Passengers with the same booking reference travel together on one flight. Put each booking group on the earliest flight on the same route that has enough free seats in its cabin for the whole group."
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01B3woMKB27kmHq3zEXGbCuQ",
+          "name": "get_flight",
+          "input": {
+            "flightId": "ZX 400"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CAjjG4ac94e7MeMEp8qtgk",
+          "name": "list_alternatives",
+          "input": {
+            "flightId": "ZX 400"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01B3woMKB27kmHq3zEXGbCuQ",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"flight\":{\"id\":\"ZX400\",\"number\":\"ZX 400\",\"from\":\"FRA\",\"to\":\"JFK\",\"departs\":\"2026-11-02T10:00\",\"status\":\"Cancelled\",\"free\":{\"Economy\":0,\"Business\":0}},\"passengers\":[{\"id\":\"c4m8pz\",\"name\":\"Jan Horvat\",\"booking\":\"HZ4K7Q\",\"cabin\":\"Economy\",\"flightId\":\"ZX400\"},{\"id\":\"r2x7kd\",\"name\":\"Maja Horvat\",\"booking\":\"HZ4K7Q\",\"cabin\":\"Economy\",\"flightId\":\"ZX400\"},{\"id\":\"w9t3fq\",\"name\":\"Luka Horvat\",\"booking\":\"HZ4K7Q\",\"cabin\":\"Economy\",\"flightId\":\"ZX400\"},{\"id\":\"b6n1vj\",\"name\":\"Elena Rossi\",\"booking\":\"RS2M9D\",\"cabin\":\"Business\",\"flightId\":\"ZX400\"},{\"id\":\"y3h5sl\",\"name\":\"Marco Rossi\",\"booking\":\"RS2M9D\",\"cabin\":\"Business\",\"flightId\":\"ZX400\"},{\"id\":\"q7d2ax\",\"name\":\"Anna Novak\",\"booking\":\"NV8P2L\",\"cabin\":\"Economy\",\"flightId\":\"ZX400\"},{\"id\":\"f5k9re\",\"name\":\"Tom Berger\",\"booking\":\"BG5J3R\",\"cabin\":\"Economy\",\"flightId\":\"ZX400\"},{\"id\":\"m1z6wu\",\"name\":\"Sara Lind\",\"booking\":\"LD9C6W\",\"cabin\":\"Business\",\"flightId\":\"ZX400\"}]}"
+            }
+          ],
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CAjjG4ac94e7MeMEp8qtgk",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"flights\":[{\"id\":\"ZX402\",\"number\":\"ZX 402\",\"from\":\"FRA\",\"to\":\"JFK\",\"departs\":\"2026-11-02T18:00\",\"status\":\"Scheduled\",\"free\":{\"Economy\":2,\"Business\":1}},{\"id\":\"ZX404\",\"number\":\"ZX 404\",\"from\":\"FRA\",\"to\":\"JFK\",\"departs\":\"2026-11-03T07:00\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":0}},{\"id\":\"ZX406\",\"number\":\"ZX 406\",\"from\":\"FRA\",\"to\":\"JFK\",\"departs\":\"2026-11-03T10:00\",\"status\":\"Scheduled\",\"free\":{\"Economy\":6,\"Business\":4}}]}"
+            }
+          ],
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'm sorting out the booking groups by reservation code, class, and passengers, then checking alternative flights ordered by departure time to see which ones have enough available seats in the right cabin class.\n\nMatching groups to flights: HZ4K7Q's 3 economy seats need ZX404, RS2M9D's 2 business seats fit on ZX406, while NV8P2L, BG5J3R, and LD9C6W can all fit on ZX402 given its available capacity. I'll run the rebooking calls for ZX404 and ZX406 together, then handle the two ZX402 bookings sequentially since they draw from the same limited seat pool.\n\n",
+          "signature": "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"
+        },
+        {
+          "type": "text",
+          "text": "Passenger groups by booking: HZ4K7Q (3 Economy), RS2M9D (2 Business), NV8P2L (1 Economy), BG5J3R (1 Economy), LD9C6W (1 Business). Based on the alternatives, the earliest fitting flights are:\n- HZ4K7Q → ZX 404 (ZX 402 has only 2 Economy seats)\n- RS2M9D → ZX 406 (ZX 402 and ZX 404 have no 2 Business seats)\n- NV8P2L, BG5J3R → ZX 402 (2 Economy seats)\n- LD9C6W → ZX 402 (1 Business seat)\n\nI'll start with the groups for ZX 404 and ZX 406."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01F5kpe6f1t3SDRFj12oKy8V",
+          "name": "rebook_passengers",
+          "input": {
+            "fromFlightId": "ZX 400",
+            "toFlightId": "ZX 404",
+            "passengerIds": [
+              "c4m8pz",
+              "r2x7kd",
+              "w9t3fq"
+            ]
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XBmmk9YymryZB4VHMKErVV",
+          "name": "rebook_passengers",
+          "input": {
+            "fromFlightId": "ZX 400",
+            "toFlightId": "ZX 406",
+            "passengerIds": [
+              "b6n1vj",
+              "y3h5sl"
+            ]
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01F5kpe6f1t3SDRFj12oKy8V",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"moved\":3,\"to\":\"ZX 404\"}"
+            }
+          ],
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XBmmk9YymryZB4VHMKErVV",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"moved\":2,\"to\":\"ZX 406\"}"
+            }
+          ],
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01J3bwDiCaJh5qRbEF8ZyMEZ",
+          "name": "rebook_passengers",
+          "input": {
+            "fromFlightId": "ZX 400",
+            "toFlightId": "ZX 402",
+            "passengerIds": [
+              "q7d2ax",
+              "f5k9re"
+            ]
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Y9Jbx1Cp187mcLgewKHPdG",
+          "name": "rebook_passengers",
+          "input": {
+            "fromFlightId": "ZX 400",
+            "toFlightId": "ZX 402",
+            "passengerIds": [
+              "m1z6wu"
+            ]
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01J3bwDiCaJh5qRbEF8ZyMEZ",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"moved\":2,\"to\":\"ZX 402\"}"
+            }
+          ],
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y9Jbx1Cp187mcLgewKHPdG",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"moved\":1,\"to\":\"ZX 402\"}"
+            }
+          ],
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "All 8 passengers on cancelled flight ZX 400 (FRA–JFK) are rebooked, and each booking group is on one flight with its cabin kept.\n\n| Booking | Passengers | Cabin | Rebooked to |\n|---|---|---|---|\n| HZ4K7Q | Jan, Maja, Luka Horvat | 3 Economy | ZX 404 (Nov 3, 07:00) |\n| RS2M9D | Elena and Marco Rossi | 2 Business | ZX 406 (Nov 3, 10:00) |\n| NV8P2L | Anna Novak | 1 Economy | ZX 402 (Nov 2, 18:00) |\n| BG5J3R | Tom Berger | 1 Economy | ZX 402 (Nov 2, 18:00) |\n| LD9C6W | Sara Lind | 1 Business | ZX 402 (Nov 2, 18:00) |\n\nThe Horvat family did not fit on ZX 402, which had only 2 Economy seats, so they went to ZX 404. The Rossis did not fit on ZX 402 or ZX 404, so they went to ZX 406. ZX 402 now has its Economy and Business seats fully used."
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "turn": 1,
+      "ms": 784,
+      "reservedUsd": 0.0469975,
+      "costUsd": 0.0005469,
+      "charged": "billed",
+      "stopReason": "tool_use",
+      "model": "claude-haiku-5-5",
+      "usage": {
+        "input_tokens": 4,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 3944,
+        "output_tokens": 107
+      }
+    },
+    {
+      "turn": 2,
+      "ms": 4390,
+      "reservedUsd": 0.04499125,
+      "costUsd": 0.000728265,
+      "charged": "billed",
+      "stopReason": "tool_use",
+      "model": "claude-haiku-5-5",
+      "usage": {
+        "input_tokens": 2,
+        "cache_read_input_tokens": 3944,
+        "cache_creation_input_tokens": 929,
+        "output_tokens": 1145
+      }
+    },
+    {
+      "turn": 3,
+      "ms": 1195,
+      "reservedUsd": 0.045239375,
+      "costUsd": 0.000330055,
+      "charged": "billed",
+      "stopReason": "tool_use",
+      "model": "claude-haiku-5-5",
+      "usage": {
+        "input_tokens": 2,
+        "cache_read_input_tokens": 4873,
+        "cache_creation_input_tokens": 1257,
+        "output_tokens": 248
+      }
+    },
+    {
+      "turn": 4,
+      "ms": 1837,
+      "reservedUsd": 0.045464375,
+      "costUsd": 0.0003095,
+      "charged": "billed",
+      "stopReason": "end_turn",
+      "model": "claude-haiku-5-5",
+      "usage": {
+        "input_tokens": 2,
+        "cache_read_input_tokens": 6130,
+        "cache_creation_input_tokens": 360,
+        "output_tokens": 406
+      }
+    }
+  ],
+  "toolCalls": [
+    {
+      "turn": 1,
+      "name": "get_flight",
+      "input": {
+        "flightId": "ZX 400"
+      },
+      "isError": false,
+      "ms": 30
+    },
+    {
+      "turn": 1,
+      "name": "list_alternatives",
+      "input": {
+        "flightId": "ZX 400"
+      },
+      "isError": false,
+      "ms": 2
+    },
+    {
+      "turn": 2,
+      "name": "rebook_passengers",
+      "input": {
+        "fromFlightId": "ZX 400",
+        "toFlightId": "ZX 404",
+        "passengerIds": [
+          "c4m8pz",
+          "r2x7kd",
+          "w9t3fq"
+        ]
+      },
+      "isError": false,
+      "ms": 22
+    },
+    {
+      "turn": 2,
+      "name": "rebook_passengers",
+      "input": {
+        "fromFlightId": "ZX 400",
+        "toFlightId": "ZX 406",
+        "passengerIds": [
+          "b6n1vj",
+          "y3h5sl"
+        ]
+      },
+      "isError": false,
+      "ms": 10
+    },
+    {
+      "turn": 3,
+      "name": "rebook_passengers",
+      "input": {
+        "fromFlightId": "ZX 400",
+        "toFlightId": "ZX 402",
+        "passengerIds": [
+          "q7d2ax",
+          "f5k9re"
+        ]
+      },
+      "isError": false,
+      "ms": 14
+    },
+    {
+      "turn": 3,
+      "name": "rebook_passengers",
+      "input": {
+        "fromFlightId": "ZX 400",
+        "toFlightId": "ZX 402",
+        "passengerIds": [
+          "m1z6wu"
+        ]
+      },
+      "isError": false,
+      "ms": 7
+    }
+  ],
+  "totals": {
+    "turns": 4,
+    "toolCalls": {
+      "get_flight": 1,
+      "list_alternatives": 1,
+      "rebook_passengers": 4
+    },
+    "toolErrors": 0,
+    "tokens": {
+      "input": 10,
+      "cacheRead": 14947,
+      "cacheWrite": 6490,
+      "output": 1906
+    },
+    "costUsd": 0.00191472,
+    "unresolvedUsd": 0,
+    "ms": 8454
+  },
+  "cacheReadOnFirstRequest": 0,
+  "appData": {
+    "flights": [
+      {
+        "id": "ZX400",
+        "number": "ZX 400",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-02T10:00",
+        "status": "Cancelled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX402",
+        "number": "ZX 402",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-02T18:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX404",
+        "number": "ZX 404",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-03T07:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX406",
+        "number": "ZX 406",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-03T10:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 6,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX401",
+        "number": "ZX 401",
+        "from": "JFK",
+        "to": "FRA",
+        "departs": "2026-11-01T22:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 7,
+          "Business": 3
+        }
+      },
+      {
+        "id": "ZX403",
+        "number": "ZX 403",
+        "from": "JFK",
+        "to": "FRA",
+        "departs": "2026-11-02T22:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 1,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX410",
+        "number": "ZX 410",
+        "from": "FRA",
+        "to": "LHR",
+        "departs": "2026-11-01T08:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 12,
+          "Business": 4
+        }
+      },
+      {
+        "id": "ZX412",
+        "number": "ZX 412",
+        "from": "FRA",
+        "to": "LHR",
+        "departs": "2026-11-02T12:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 5,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX418",
+        "number": "ZX 418",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-01T15:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 4,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX420",
+        "number": "ZX 420",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-02T09:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 9,
+          "Business": 6
+        }
+      },
+      {
+        "id": "ZX422",
+        "number": "ZX 422",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-03T11:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 1
+        }
+      },
+      {
+        "id": "ZX424",
+        "number": "ZX 424",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-02T08:00",
+        "status": "Cancelled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      }
+    ],
+    "passengers": [
+      {
+        "id": "c4m8pz",
+        "name": "Jan Horvat",
+        "booking": "HZ4K7Q",
+        "cabin": "Economy",
+        "flightId": "ZX404"
+      },
+      {
+        "id": "r2x7kd",
+        "name": "Maja Horvat",
+        "booking": "HZ4K7Q",
+        "cabin": "Economy",
+        "flightId": "ZX404"
+      },
+      {
+        "id": "w9t3fq",
+        "name": "Luka Horvat",
+        "booking": "HZ4K7Q",
+        "cabin": "Economy",
+        "flightId": "ZX404"
+      },
+      {
+        "id": "b6n1vj",
+        "name": "Elena Rossi",
+        "booking": "RS2M9D",
+        "cabin": "Business",
+        "flightId": "ZX406"
+      },
+      {
+        "id": "y3h5sl",
+        "name": "Marco Rossi",
+        "booking": "RS2M9D",
+        "cabin": "Business",
+        "flightId": "ZX406"
+      },
+      {
+        "id": "q7d2ax",
+        "name": "Anna Novak",
+        "booking": "NV8P2L",
+        "cabin": "Economy",
+        "flightId": "ZX402"
+      },
+      {
+        "id": "f5k9re",
+        "name": "Tom Berger",
+        "booking": "BG5J3R",
+        "cabin": "Economy",
+        "flightId": "ZX402"
+      },
+      {
+        "id": "m1z6wu",
+        "name": "Sara Lind",
+        "booking": "LD9C6W",
+        "cabin": "Business",
+        "flightId": "ZX402"
+      },
+      {
+        "id": "k8p4ty",
+        "name": "Ivo Petrov",
+        "booking": "PT3F8N",
+        "cabin": "Economy",
+        "flightId": "ZX424"
+      },
+      {
+        "id": "j2s7gn",
+        "name": "Lea Weber",
+        "booking": "WB6H2K",
+        "cabin": "Economy",
+        "flightId": "ZX424"
+      }
+    ]
+  },
+  "grade": {
+    "pass": true,
+    "differences": []
+  }
+}

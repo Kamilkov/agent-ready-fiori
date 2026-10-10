@@ -1,0 +1,14 @@
+{
+  "systemPrompt": "Run ID: <attempt ID>\n\nYou are a browser agent working for a dispatcher at ZX Airlines. The airline's Disruption desk app is open in the browser. Use the tools you have to do the dispatcher's task in the app. When you are done, reply with a short summary of what you did.",
+  "limits": {
+    "turns": 60,
+    "ms": 600000
+  },
+  "code": "3bc81af0b854e31ef30d90c59eccb6bb0c0b9b88bfd0d37fded52ea124c349f6",
+  "versions": {
+    "chrome": "154.0.8037.98",
+    "chromeDevtoolsMcp": "1.10.1"
+  },
+  "node": "v26.8.2",
+  "anthropicSdk": "0.132.1"
+}

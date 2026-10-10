@@ -1,0 +1,22 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>WebMCP probe</title>
+<h1>WebMCP probe</h1>
+<script>
+  window.probe = { hasModelContext: 'modelContext' in document, registered: 0, error: null }
+  ;(async () => {
+    if (!window.probe.hasModelContext) return
+    const inputSchema = { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] }
+    try {
+      await document.modelContext.registerTool({ name: 'echo', title: 'Echo', description: 'Returns its input as a JSON string.',
+        inputSchema, annotations: { readOnlyHint: true }, execute: async input => JSON.stringify({ ok: true, got: input }) })
+      await document.modelContext.registerTool({ name: 'echo_object', title: 'Echo object', description: 'Returns its input as an object.',
+        inputSchema, annotations: { consequentialHint: true }, execute: async input => ({ ok: true, got: input }) })
+      await document.modelContext.registerTool({ name: 'echo_text', title: 'Echo text', description: 'Returns plain text, not JSON.',
+        inputSchema, annotations: { readOnlyHint: true }, execute: async input => `plain ${input.text}` })
+      await document.modelContext.registerTool({ name: 'fail', title: 'Fail', description: 'Always throws.',
+        inputSchema, annotations: { readOnlyHint: true }, execute: async () => { throw new Error('Only 1 business seat left on ZX 402') } })
+      window.probe.registered = 4
+    } catch (e) { window.probe.error = String(e) }
+  })()
+</script>
