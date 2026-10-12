@@ -19,17 +19,20 @@
   pre { white-space: pre-wrap; word-break: break-word; max-height: 20rem; overflow: auto; font-size: .8rem; }
   img { max-width: 100%; border: 1px solid var(--line); }
   code { font-size: .85rem; }
+  nav a[aria-current] { font-weight: 600; text-decoration: none; }
 </style>
 </head>
 <body>
 <h1>Agent-ready Fiori: what WebMCP changes for a browser agent</h1>
-<p>The same Claude agent does the same tasks in the same Fiori-style app, once through the page alone (accessibility snapshots, clicks and typing) and once with the four WebMCP tools the page registers. Every number below was measured, and every run's full trace is linked.</p>
+<p>The same Claude agent does the same tasks in the same Fiori-style app, once through the page alone (accessibility snapshots, clicks and typing) and once with the WebMCP tools the page registers (four in round one, six in round two). Every number below was measured, and every run's full trace is linked.</p>
+<nav><a href="?set=batch">Round one: three easy tasks</a> · <a href="?set=hard">Round two: a hard task</a></nav>
 <div id="results">Loading the results…</div>
 <script>
 'use strict'
 const set = new URLSearchParams(location.search).get('set') || 'batch'
 const base = `../runs/${set}/`
-const TASKS = { t1: 'T1 · read only', t2: 'T2 · one change', t3: 'T3 · batch' }
+document.querySelector(`nav a[href="?set=${set}"]`)?.setAttribute('aria-current', 'page')
+const TASKS = { t1: 'T1 · read only', t2: 'T2 · one change', t3: 'T3 · batch', t4: 'T4 · one group, via a connection', t5: 'T5 · everyone, by priority' }
 const MODELS = { opus: 'Opus 5.5', haiku: 'Haiku 5.5' }
 const MODES = { ui: 'UI only', webmcp: 'WebMCP' }
 
@@ -46,10 +49,12 @@ const traceUrl = (s, dir) => (s.traceBase ? `${s.traceBase}${dir}/trace.json` : 
 const mark = status => ({ pass: '✓', fail: '✗' })[status] ?? '↻'
 
 function headline(s) {
-  const head = ['Task', 'Model', 'Mode', 'Success', 'Turns', 'Input tokens', 'Cache read', 'Cache write', 'Output tokens', 'Cost', 'Time (s)', 'Spend, all attempts', 'Spend per success', 'Traces']
+  const groups = s.cells.some(c => c.groups)
+  const head = ['Task', 'Model', 'Mode', 'Success', ...(groups ? ['Groups right, all runs'] : []), 'Turns', 'Input tokens', 'Cache read', 'Cache write', 'Output tokens', 'Cost', 'Time (s)', 'Spend, all attempts', 'Spend per success', 'Traces']
   const rows = s.cells.map(c => el('tr', {},
     el('td', {}, TASKS[c.task]), el('td', {}, MODELS[c.model]), el('td', {}, MODES[c.mode]),
     el('td', { class: c.successes ? 'pass' : 'fail' }, `${c.successes}/${c.counted}`),
+    groups && el('td', {}, c.groups ? `${c.groups.scores.map(x => x ?? '–').join(', ')} → ${c.groups.total ? `${c.groups.right}/${c.groups.total}` : '–'}${c.groups.ungraded ? ` (${c.groups.ungraded} ungraded)` : ''}` : ''),
     c.stats
       ? [...['turns', 'input', 'cacheRead', 'cacheWrite', 'output'].map(k => el('td', {}, range(c.stats[k]))),
          el('td', {}, range(c.stats.costUsd, usd)), el('td', {}, range(c.stats.seconds))]
@@ -59,6 +64,7 @@ function headline(s) {
     el('td', {}, c.attempts.map(a => [el('a', { href: traceUrl(s, a.dir), title: a.reason ? `${a.status}: ${a.reason.split('\n')[0]}` : a.status }, `#${a.pos}${mark(a.status)}`), ' ']))))
   return el('section', {}, el('h2', {}, 'Results'),
     el('p', { class: 'muted' }, 'Success counts the counted attempts of each cell. Turns, tokens, cost and time cover successful runs only: median (min–max). Spend is the billed cost of every attempt, replaced ones included; a request that never got an answer has an unknown cost and is shown apart as reserved (its worst case). ✓ passed, ✗ failed, ↻ replaced after an infrastructure error.'),
+    groups && el('p', { class: 'muted' }, 'Groups right: for each counted run, failed ones included, the booking groups whose final assignment is correct (a group rightly left behind counts), then their sum. A run whose final state could not be read shows –.'),
     el('div', { class: 'wide' }, el('table', {}, el('thead', {}, el('tr', {}, head.map(h => el('th', {}, h)))), el('tbody', {}, rows))))
 }
 
@@ -149,6 +155,7 @@ function caveats(s) {
     el('li', {}, 'WebMCP is a W3C Web Machine Learning Community Group draft, not a standard. Its API changed several times in 2026.'),
     el('li', {}, `Chrome ${list(v.chrome)} with WebMCP turned on by a feature flag. UI-only runs use the same Chrome without it.`),
     el('li', {}, 'We designed the app and its tools. Each tool does exactly what one screen action does, through the same code, but a different app could favour either mode.'),
+    s.cells.some(c => c.task === 't4' || c.task === 't5') && el('li', {}, 'T4 and T5 use the desk\'s connection screens and tools, built by a separate Claude session from a written spec that never included the tasks.'),
     el('li', {}, `${s.runsPerCell} runs per cell: enough to show a pattern, not to claim statistical significance.`),
     el('li', {}, `Runs from ${s.dates.first?.slice(0, 10)} to ${s.dates.last?.slice(0, 10)}. Models: ${list(v.models)}, effort medium, adaptive thinking. chrome-devtools-mcp ${list(v.chromeDevtoolsMcp)}, @anthropic-ai/sdk ${list(v.anthropicSdk)}, Node ${list(v.node)}, UI5 1.136.8.`),
     s.cacheLeaks.length ? el('li', { class: 'fail' }, `${s.cacheLeaks.length} attempts read from the prompt cache on their first request.`) : null))

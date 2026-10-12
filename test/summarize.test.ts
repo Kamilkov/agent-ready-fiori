@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { makeSchedule, type Status } from '../bench/schedule.ts'
-import { pickReplay, stat, summarizeCells, type Attempt } from '../bench/summarize.ts'
+import { groupsOf, pickReplay, stat, summarizeCells, type Attempt } from '../bench/summarize.ts'
+import type { TaskId } from '../bench/tasks.ts'
 
 const totals = (turns: number, cost = 1) => ({
   turns, toolCalls: {}, toolErrors: 0, tokens: { input: 100, cacheRead: 300, cacheWrite: 100, output: 10 }, costUsd: cost, unresolvedUsd: 0, ms: turns * 1000,
@@ -10,7 +11,7 @@ const schedule = makeSchedule({ seed: 1, runs: 4, tasks: ['t2'], modes: ['ui'], 
 const attempt = (pos: number, status: Status, turns: number, cost = 1): Attempt => ({
   id: `a${pos}`, pos, dir: `d${pos}`, task: 't2', mode: 'ui', model: 'haiku', status, reason: status === 'fail' ? 'turn_limit' : null,
   costUsd: cost, totals: totals(turns, cost), startedAt: '2026-10-10T10:00:00Z', versions: {}, models: ['claude-haiku-5-5'], cacheReadOnFirstRequest: 0,
-  overReserved: false, unresolvedUsd: 0,
+  overReserved: false, unresolvedUsd: 0, grade: null,
 })
 
 test('stat: median of an odd and an even count', () => {
@@ -54,4 +55,27 @@ test('stats cover successful runs only; spend covers every attempt; cache read s
   assert.equal(cell.spendPerSuccessUsd, 7.75)
   assert.equal(cell.cacheReadShare, 0.6)
   assert.deepEqual(cell.replay, { dir: 'd0', failed: false })
+})
+
+// T4 and T5 are not TaskIds until part B; the summary keys cells by name, so a cast is enough here.
+const t5 = 't5' as TaskId
+const t5Schedule = makeSchedule({ seed: 1, runs: 5, tasks: [t5], modes: ['ui'], models: ['haiku'] })
+const g = (right: number) => ({ pass: right === 8, differences: [], groups: { right, total: 8 } })
+
+test('groups: every counted attempt counts, failures included; transient ones do not; ungraded shown apart', () => {
+  const [cell] = summarizeCells(t5Schedule, [
+    { ...attempt(0, 'pass', 9), task: t5, grade: g(8) }, { ...attempt(1, 'fail', 9), task: t5, grade: g(5) },
+    { ...attempt(2, 'fail', 60), task: t5, grade: null }, { ...attempt(3, 'transient', 2), task: t5, grade: g(1) },
+  ])
+  assert.deepEqual(cell.groups, { scores: [8, 5, null], right: 13, total: 16, ungraded: 1 })
+})
+
+test('groups: five ungraded T5 failures still give the figure, as five missing grades', () => {
+  const fails = [0, 1, 2, 3, 4].map(i => ({ ...attempt(i, 'fail', 120), task: t5, grade: null }))
+  assert.deepEqual(summarizeCells(t5Schedule, fails)[0].groups, { scores: [null, null, null, null, null], right: 0, total: 0, ungraded: 5 })
+})
+
+test('groups: null for a task without the figure, whatever its grades say', () => {
+  assert.equal(summarizeCells(schedule, [{ ...attempt(0, 'pass', 9), grade: g(8) }])[0].groups, null)
+  assert.deepEqual(groupsOf([]), { scores: [], right: 0, total: 0, ungraded: 0 })
 })

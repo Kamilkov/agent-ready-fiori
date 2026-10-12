@@ -16,7 +16,8 @@ sap.ui.define([
         airports: [any, ...airports.map(a => ({ key: a, text: a }))],
         statuses: [any, { key: 'Scheduled', text: 'Scheduled' }, { key: 'Cancelled', text: 'Cancelled' }],
         rows: [], selected: null, selection: [],
-        dialog: { title: '', targets: [], target: '', error: '' }
+        dialog: { title: '', targets: [], target: '', error: '' },
+        connect: { flight: null, cabin: '', list: [], passengers: [], selection: [], chosen: [], error: '' }
       })
       this.getView().setModel(this.model)
       this.onFilter()
@@ -28,7 +29,16 @@ sap.ui.define([
     },
 
     when: departs => (departs ? departs.replace('T', ' ') : ''),
+    // A passenger's flights in order, by number: "ZX 450 → ZX 460".
+    flightNumbers(ids) { return (ids ?? []).map(id => this.data().flights.find(f => f.id === id)?.number ?? id).join(' → ') },
     data() { return this.model.getProperty('/data') },
+    // Goes to a page, or back to it when it is the page before (a flight's detail, from its connections).
+    show(id) {
+      const nav = this.byId('nav'), page = this.byId(id)
+      if (nav.getCurrentPage() === page) return
+      if (nav.getPreviousPage() === page) nav.back()
+      else nav.to(page)
+    },
 
     // Flights screen. search_flights sets the same filters.
     onFilter() {
@@ -52,7 +62,7 @@ sap.ui.define([
       this.model.setProperty('/selected', r)
       this.model.setProperty('/selection', [])
       this.byId('passengerTable').removeSelections(true)
-      this.byId('nav').to(this.byId('detailPage'))
+      this.show('detailPage')
       return r
     },
     onBack() { this.byId('nav').back() },
@@ -85,14 +95,75 @@ sap.ui.define([
     },
     onCancelRebook() { this.byId('rebookDialog').close() },
 
-    // One rebooking, from Confirm or from rebook_passengers. On success the source flight's detail shows who is left.
+    // One rebooking, from Confirm or from rebook_passengers.
     rebook(input) {
       const r = rules.rebook(this.data(), input)
-      if (!r.ok) return r
+      if (r.ok) this.rebooked(input.fromFlightId, r.moved, r.to)
+      return r
+    },
+    // After any rebooking the cancelled flight's detail shows who is left.
+    rebooked(fromFlightId, moved, to) {
       this.model.refresh(true)
       this.onFilter()
-      this.openFlight(input.fromFlightId)
-      MessageToast.show(`Rebooked ${r.moved} passenger${r.moved === 1 ? '' : 's'} to ${r.to}`)
+      this.openFlight(fromFlightId)
+      MessageToast.show(`Rebooked ${moved} passenger${moved === 1 ? '' : 's'} to ${to}`)
+    },
+
+    // Connections screen, from a cancelled flight's detail; the cabin filter lists again. find_connections does both.
+    onFindConnections() { this.showConnections({ flightId: this.model.getProperty('/selected/flight/id') }) },
+    onCabinChange(e) {
+      const key = e.getParameter('item').getKey()
+      this.showConnections({ flightId: this.model.getProperty('/connect/flight/id'), cabin: key === 'Any' ? '' : key })
+    },
+    showConnections(input) {
+      const r = rules.connections(this.data(), input?.flightId, input?.cabin)
+      if (!r.ok) return r
+      const { flight, passengers } = rules.getFlight(this.data(), input.flightId)
+      // Listing again on the open screen keeps the ticked passengers; opening it starts afresh.
+      if (this.byId('nav').getCurrentPage() !== this.byId('connectionsPage') || this.model.getProperty('/connect/flight/id') !== flight.id) {
+        this.model.setProperty('/connect/flight', flight)
+        this.model.setProperty('/connect/passengers', passengers)
+        this.model.setProperty('/connect/selection', [])
+        this.byId('connectPassengerTable').removeSelections(true)
+      }
+      this.model.setProperty('/connect/cabin', r.cabin)
+      this.model.setProperty('/connect/list', r.connections)
+      this.model.setProperty('/connect/chosen', [])
+      this.model.setProperty('/connect/error', '')
+      this.byId('connectionTable').removeSelections(true)
+      this.show('connectionsPage')
+      return r
+    },
+    onConnectPassengerSelect() {
+      this.model.setProperty('/connect/selection', this.byId('connectPassengerTable').getSelectedContexts().map(c => c.getProperty('id')))
+      this.model.setProperty('/connect/error', '')
+    },
+    onConnectionSelect(e) {
+      this.model.setProperty('/connect/chosen', e.getParameter('listItem').getBindingContext().getProperty('flights').map(f => f.id))
+      this.model.setProperty('/connect/error', '')
+    },
+    onRebookConnection() {
+      const c = this.model.getProperty('/connect')
+      const r = this.rebookConnection({ fromFlightId: c.flight.id, toFlightIds: c.chosen, passengerIds: c.selection })
+      if (!r.ok) this.model.setProperty('/connect/error', r.error)
+    },
+    // One rebooking onto a connection, from the Connections screen or from rebook_onto_connection.
+    rebookConnection(input) {
+      const r = rules.rebookConnection(this.data(), input)
+      if (!r.ok) return r
+      // A Connections screen showing this flight drops the moved passengers and shows the new seats at once, not only
+      // after it has slid out: an agent reading it mid-slide must not think the rebooking failed.
+      const { flight, passengers } = rules.getFlight(this.data(), input.fromFlightId)
+      if (this.model.getProperty('/connect/flight/id') === flight.id) {
+        const list = rules.connections(this.data(), flight.id, this.model.getProperty('/connect/cabin'))
+        this.model.setProperty('/connect/passengers', passengers)
+        if (list.ok) this.model.setProperty('/connect/list', list.connections)
+        this.model.setProperty('/connect/selection', [])
+        this.model.setProperty('/connect/chosen', [])
+        this.byId('connectPassengerTable').removeSelections(true)
+        this.byId('connectionTable').removeSelections(true)
+      }
+      this.rebooked(input.fromFlightId, r.moved, r.to.join(' → '))
       return r
     }
   })

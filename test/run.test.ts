@@ -5,17 +5,18 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { test } from 'node:test'
 import type { Session } from '../bench/browser.ts'
-import { apiClient, checkConfig, lockSet, recover } from '../bench/run.ts'
+import { LIMITS } from '../bench/agent.ts'
+import { apiClient, checkConfig, limitsFor, lockSet, PAGE_TOOLS, recover } from '../bench/run.ts'
 import type { AttemptRecord } from '../bench/schedule.ts'
+import { tasks } from '../bench/tasks.ts'
 
-const PAGE_TOOLS = ['get_flight', 'list_alternatives', 'rebook_passengers', 'search_flights']
 const session = (mode: string, launchArgs = [`--${mode}`], chrome = '154.0.8037.98', pageTools = mode === 'webmcp' ? PAGE_TOOLS : []) =>
   ({ tools: [{ name: `tool-${mode}` }], pageTools: pageTools.map(name => ({ name })), versions: { chrome, chromeDevtoolsMcp: '1.10.1' }, launchArgs }) as unknown as Session
 
 test('checkConfig: WebMCP mode needs exactly the 4 page tools and UI mode none, before anything is frozen', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'set-'))
   // WebMCP gone after a Chrome update, or a failed registration: the webmcp column would measure UI-only runs.
-  await assert.rejects(checkConfig(dir, 'webmcp', 'haiku', session('webmcp', undefined, undefined, []), 'code-A'), /webmcp mode has page tools \[\], not \[get_flight/)
+  await assert.rejects(checkConfig(dir, 'webmcp', 'haiku', session('webmcp', undefined, undefined, []), 'code-A'), new RegExp(`webmcp mode has page tools \\[\\], not \\[${PAGE_TOOLS[0]}`))
   await assert.rejects(checkConfig(dir, 'ui', 'haiku', session('ui', undefined, undefined, ['search_flights']), 'code-A'), /ui mode has page tools \[search_flights\], not \[\]/)
   await assert.rejects(readFile(join(dir, 'config', 'set.json')))
 })
@@ -72,4 +73,19 @@ test('recover: a trace that finished keeps its verdict and cost; an unfinished o
   assert.deepEqual(await recover(dir, a('cut')), { ...cut, costUsd: 0.4, unresolvedUsd: 0.1 })
   assert.deepEqual(JSON.parse(await readFile(join(dir, 'attempts', 'cut', 'trace.json'), 'utf8')).outcome, cut)
   assert.deepEqual(await recover(dir, a('missing')), { ...cut, costUsd: 0, unresolvedUsd: 0 })
+})
+
+test('limits: a task without its own uses the default; set.json freezes every task\'s limits', async () => {
+  assert.deepEqual(limitsFor('t1'), LIMITS)
+  const dir = await mkdtemp(join(tmpdir(), 'set-'))
+  await checkConfig(dir, 'ui', 'haiku', session('ui'), 'code-A')
+  const set = JSON.parse(await readFile(join(dir, 'config', 'set.json'), 'utf8'))
+  assert.deepEqual(Object.keys(set.limits), Object.keys(tasks))
+  assert.deepEqual(set.limits.t1, LIMITS)
+})
+
+test('PAGE_TOOLS: part 1\'s 4 tools and the connection tools, sorted', () => {
+  assert.deepEqual(PAGE_TOOLS, [...PAGE_TOOLS].sort())
+  for (const t of ['get_flight', 'list_alternatives', 'rebook_passengers', 'search_flights']) assert.ok(PAGE_TOOLS.includes(t), t)
+  assert.ok(PAGE_TOOLS.length > 4)
 })

@@ -7,7 +7,6 @@ import { VERSION } from '@anthropic-ai/sdk/version'
 import { execFileSync } from 'node:child_process'
 import { createHash, randomUUID } from 'node:crypto'
 import { mkdir, readdir, readFile, rename, unlink, writeFile } from 'node:fs/promises'
-import { homedir } from 'node:os'
 import { dirname, join, relative } from 'node:path'
 import { parseArgs, parseEnv } from 'node:util'
 import { openSession, type Mode, type Session } from './browser.ts'
@@ -80,15 +79,19 @@ async function codeFingerprint(): Promise<string> {
 // its first request, so a set never mixes configurations. set.json holds what every attempt shares: the prompt (without
 // the run ID), limits, the code fingerprint and the Chrome, chrome-devtools-mcp, Node and SDK versions.
 // <mode>-<model>.json holds what differs: request settings, tools and launch arguments.
-// A mode is the tools it offers. WebMCP mode without exactly the app's 4 page tools (WebMCP gone after a Chrome
+// A mode is the tools it offers. WebMCP mode without exactly the app's page tools (WebMCP gone after a Chrome
 // update, a registration that failed) would measure something else under its name; so would UI mode with any.
-const PAGE_TOOLS = ['get_flight', 'list_alternatives', 'rebook_passengers', 'search_flights']
+// Part 1's 4 tools plus the connection tools the scenario 2 build registered, sorted.
+const CONNECTION_TOOLS = ['find_connections', 'rebook_onto_connection']
+export const PAGE_TOOLS = [...['get_flight', 'list_alternatives', 'rebook_passengers', 'search_flights'], ...CONNECTION_TOOLS].sort()
+/** A task's turn and time limits: its own (T4, T5) or the default. */
+export const limitsFor = (task: TaskId) => tasks[task].limits ?? LIMITS
 
 export async function checkConfig(dir: string, mode: Mode, model: ModelKey, session: Session, code: string) {
   const pageTools = session.pageTools.map(t => t.name).sort(), want = mode === 'webmcp' ? PAGE_TOOLS : []
   if (pageTools.join() !== want.join()) throw new Error(`${mode} mode has page tools [${pageTools.join(', ')}], not [${want.join(', ')}]`)
   await freeze(join(dir, 'config', 'set.json'), {
-    systemPrompt: systemPrompt('<attempt ID>'), limits: LIMITS, code, versions: session.versions, node: process.version, anthropicSdk: VERSION,
+    systemPrompt: systemPrompt('<attempt ID>'), limits: Object.fromEntries((Object.keys(tasks) as TaskId[]).map(t => [t, limitsFor(t)])), code, versions: session.versions, node: process.version, anthropicSdk: VERSION,
   })
   await freeze(join(dir, 'config', `${mode}-${model}.json`), { request: settings(model), tools: session.tools, launchArgs: session.launchArgs })
 }
@@ -186,7 +189,7 @@ async function attempt(ctx: Context, slot: Slot, started: (rec: AttemptRecord) =
     // Hashed for each attempt: the server reads app/ from disk on every request, so an edit mid-set is caught here.
     await checkConfig(ctx.dir, slot.mode, slot.model, s, await codeFingerprint())
     const run = await runAgent({
-      model: slot.model, system: systemPrompt(id), tools: s.tools, prompt: tasks[slot.task].prompt,
+      model: slot.model, system: systemPrompt(id), tools: s.tools, prompt: tasks[slot.task].prompt, limits: limitsFor(slot.task),
       send: ctx.send, budget: ctx.budget, onUpdate: keep,
       exec: (tool, input, signal) => s.run(tool, input, signal),
       afterTurn: async (turn, signal) => writeFile(join(out, 'shots', `t${String(turn).padStart(2, '0')}.jpg`), await s.screenshot(signal)),
@@ -223,7 +226,7 @@ if (import.meta.main) {
   const { values } = parseArgs({
     options: {
       set: { type: 'string' }, runs: { type: 'string', default: '5' }, 'max-usd': { type: 'string' },
-      'key-file': { type: 'string', default: join(homedir(), '.config/ai/secrets.env') },
+      'key-file': { type: 'string', default: '.env' },
       task: { type: 'string', multiple: true }, mode: { type: 'string', multiple: true }, model: { type: 'string', multiple: true },
     },
   })
@@ -269,7 +272,7 @@ if (import.meta.main) {
       await save()
       console.log(`  ${rec.status}${rec.reason ? ` (${rec.reason.split('\n')[0]})` : ''} · ${rec.costUsd.toFixed(3)}${rec.unresolvedUsd ? ` + ${rec.unresolvedUsd.toFixed(3)} unresolved` : ''} · ${rec.dir}`)
       if (stop) { console.error(`Stopped: a third transient error in ${rec.task} ${rec.mode} ${rec.model}`); code = 2; break }
-      if (rec.status === 'harness_error') { console.error('Stopped: harness error. Kamil decides what to rerun; see the trace.'); code = 3; break }
+      if (rec.status === 'harness_error') { console.error('Stopped: harness error. Decide what to rerun; see the trace.'); code = 3; break }
       if (rec.status === 'interrupted') { console.error(`Stopped at the spending cap: $${budget.spentUsd.toFixed(2)} of $${maxUsd} spent`); code = 4; break }
     }
   } finally {

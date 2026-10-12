@@ -14,6 +14,7 @@ export interface Attempt extends AttemptRecord {
   totals: Totals | null; startedAt: string; versions: Record<string, string>; models: string[]; cacheReadOnFirstRequest: number
   /** A request billed more than its reservation: the spending cap's bound is wrong and must be fixed before more runs. */
   overReserved: boolean
+  grade: { pass: boolean; groups?: { right: number; total: number } } | null
 }
 export interface Stat { median: number; min: number; max: number }
 
@@ -22,7 +23,20 @@ const METRICS = {
   cacheWrite: (t: Totals) => t.tokens.cacheWrite, output: (t: Totals) => t.tokens.output, costUsd: (t: Totals) => t.costUsd,
   seconds: (t: Totals) => t.ms / 1000,
 }
-const ORDER: Record<string, number> = { t1: 0, t2: 1, t3: 2, opus: 0, haiku: 1, ui: 0, webmcp: 1 }
+const ORDER: Record<string, number> = { t1: 0, t2: 1, t3: 2, t4: 3, t5: 4, opus: 0, haiku: 1, ui: 0, webmcp: 1 }
+/** The tasks graded by groups with the correct final assignment. */
+const GROUP_TASKS = new Set(['t4', 't5'])
+
+/** Groups with the correct final assignment over every counted attempt, failures included; an attempt without a
+ *  grade is counted apart, never as 0, even when no attempt has one. */
+export function groupsOf(counted: Attempt[]) {
+  const scored = counted.flatMap(a => (a.grade?.groups ? [a.grade.groups] : []))
+  return {
+    scores: counted.map(a => a.grade?.groups?.right ?? null),
+    right: scored.reduce((s, g) => s + g.right, 0), total: scored.reduce((s, g) => s + g.total, 0),
+    ungraded: counted.length - scored.length,
+  }
+}
 
 export function stat(values: number[]): Stat {
   const v = [...values].sort((a, b) => a - b), mid = Math.floor(v.length / 2)
@@ -55,7 +69,7 @@ export function summarizeCells(schedule: Schedule, attempts: Attempt[]) {
     const read = tokens.reduce((s, t) => s + t.cacheRead, 0), prompt = tokens.reduce((s, t) => s + t.input + t.cacheRead + t.cacheWrite, 0)
     const replay = pickReplay(wins) ?? pickReplay(counted)
     return {
-      ...cell, counted: counted.length, successes: wins.length,
+      ...cell, counted: counted.length, successes: wins.length, groups: GROUP_TASKS.has(cell.task) ? groupsOf(counted) : null,
       stats: won.length ? Object.fromEntries(Object.entries(METRICS).map(([k, f]) => [k, stat(won.map(f))])) as Record<keyof typeof METRICS, Stat> : null,
       spendUsd, unresolvedUsd, spendPerSuccessUsd: wins.length ? spendUsd / wins.length : null,
       cacheReadShare: prompt ? read / prompt : 0,
@@ -73,7 +87,7 @@ if (import.meta.main) {
   const attempts: Attempt[] = await Promise.all(schedule.attempts.map(async a => {
     const t = JSON.parse(await readFile(join(dir, 'attempts', a.dir, 'trace.json'), 'utf8'))
     const requests = (t.requests ?? []) as { model: string | null; charged: string; costUsd: number; reservedUsd: number }[]
-    return { ...a, totals: t.totals ?? null, startedAt: t.startedAt, versions: t.versions ?? {}, cacheReadOnFirstRequest: t.cacheReadOnFirstRequest ?? 0,
+    return { ...a, totals: t.totals ?? null, grade: t.grade ?? null, startedAt: t.startedAt, versions: t.versions ?? {}, cacheReadOnFirstRequest: t.cacheReadOnFirstRequest ?? 0,
       models: [...new Set(requests.flatMap(r => (r.model ? [r.model] : [])))],
       overReserved: requests.some(r => r.charged === 'billed' && r.costUsd > r.reservedUsd) }
   }))
@@ -88,6 +102,7 @@ if (import.meta.main) {
       task: c.task, mode: c.mode, model: c.model, success: `${c.successes}/${c.counted}`, turns: c.stats?.turns.median ?? '-',
       costMedian: c.stats ? c.stats.costUsd.median.toFixed(3) : '-', spend: c.spendUsd.toFixed(3), unresolved: c.unresolvedUsd ? c.unresolvedUsd.toFixed(3) : '-',
       perSuccess: c.spendPerSuccessUsd?.toFixed(3) ?? 'N/A', cacheRead: `${Math.round(c.cacheReadShare * 100)}%`,
+      groups: c.groups ? `${c.groups.scores.map(s => s ?? '–').join(', ')} → ${c.groups.total ? `${c.groups.right}/${c.groups.total}` : '–'}${c.groups.ungraded ? ` (${c.groups.ungraded} ungraded)` : ''}` : '-',
     })))
     console.log(`Billed ${total.toFixed(2)}, plus ${unresolved.toFixed(2)} reserved for requests without an answer. At 5 runs per cell: about ${(total * 5 / schedule.runs).toFixed(2)} billed.`)
     console.log(`First requests that read from the cache: ${cacheLeaks.length ? cacheLeaks.join(', ') : 'none'}`)

@@ -1,0 +1,58 @@
+/* The desk's look on top of sap_horizon, for clearer screenshots. Visual only: no text, no control and no generated
+   content changes, so the page the UI-only agent reads stays exactly the one the benchmark ran on. */
+
+/* The ZX mark before each page title: a background image, so nothing is added to the accessibility tree. */
+.deskApp .sapMPageHeader .sapMTitle::before {
+  content: ""; display: inline-block; width: 1.75rem; height: 1.75rem; margin-right: .625rem; vertical-align: middle;
+  border-radius: .5rem; background: #0064d9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Ctext x='14' y='18.5' text-anchor='middle' font-family='Helvetica,sans-serif' font-size='12' font-weight='700' fill='white'%3EZX%3C/text%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Filters and tables as cards on the page background. */
+.deskApp .deskFilters, .deskApp .deskCard {
+  background: #fff; border-radius: .75rem; box-shadow: 0 0 .125rem rgba(34, 53, 72, .16), 0 .125rem .25rem rgba(34, 53, 72, .1);
+}
+.deskApp .deskFilters { margin: 1rem 1.5rem 0; padding: 1rem 1.25rem; gap: 1rem 0; }
+.deskApp .deskCard { width: auto !important; margin: 1rem 1.5rem 1.5rem; overflow: hidden; }
+.deskApp .deskCard .sapMListTblHeader .sapMListTblCell { color: #556b82; font-size: .8125rem; }
+.deskApp .deskCard .sapMListHdrTBar, .deskApp .deskCard .sapMListHdr { padding-left: 1.25rem; padding-right: 1rem; }
+
+/* A flight's header: route large, its facts in one row, label above value. */
+.deskApp .deskHeader {
+  flex-direction: row; flex-wrap: wrap; align-items: center; gap: .75rem 2.5rem;
+  margin: 0; padding: 1.25rem 1.5rem 1.5rem; background: #fff; box-shadow: 0 1px 0 #e5e8eb;
+}
+.deskApp .deskHeader .sapMTitle { font-size: 1.875rem; font-weight: 700; color: #1d2d3e; margin-right: 1rem; }
+.deskApp .deskHeader .sapMObjStatus { display: flex; flex-direction: column; gap: .25rem; }
+.deskApp .deskHeader .sapMObjStatusTitle { color: #556b82; font-size: .8125rem; }
+.deskApp .deskHeader .sapMObjStatusWrapper { line-height: 1.375rem; padding-top: .125rem; padding-bottom: .125rem; } /* as tall as a badge */
+.deskApp .deskHeader .sapMObjStatusText { font-size: 1rem; font-weight: 600; color: #1d2d3e; }
+
+/* Status as a badge, wherever it shows. */
+.deskApp .sapMObjStatusError .sapMObjStatusWrapper, .deskApp .sapMObjStatusSuccess .sapMObjStatusWrapper {
+  display: inline-block; padding: .125rem .625rem; border-radius: 1rem;
+}
+.deskApp .sapMObjStatusError .sapMObjStatusWrapper { background: #ffeaf4; }
+.deskApp .sapMObjStatusSuccess .sapMObjStatusWrapper { background: #f5fae5; }
+.deskApp .sapMObjStatusError .sapMObjStatusText { color: #aa0808; font-weight: 600; }
+.deskApp .sapMObjStatusSuccess .sapMObjStatusText { color: #256f3a; font-weight: 600; }
+
+/* Numbers that line up; no free seats in red. */
+.deskApp .sapMListTbl .sapMText { font-variant-numeric: tabular-nums; }
+.deskApp [data-seats="none"] { color: #aa0808; font-weight: 700; }
+.deskApp .deskStrong { font-weight: 600; }
+.deskApp .sapMListTbl .sapMLnk { font-weight: 600; }
+
+/* Cabins as pills. */
+.deskApp [data-cabin] { display: inline-block; padding: .125rem .625rem; border-radius: 1rem; font-size: .8125rem; font-weight: 600; }
+.deskApp [data-cabin="Business"] { background: #354a5f; color: #fff; }
+.deskApp [data-cabin="Economy"] { background: #eff1f2; color: #1d2d3e; }
+.deskApp .deskRef { font-weight: 600; letter-spacing: .04em; color: #354a5f; }
+
+/* A connection: one block per flight, the change count as a pill. */
+.deskApp .deskLegs { gap: .25rem; }
+.deskApp .deskLegs .sapMText { padding: .1875rem .5rem; border-radius: .375rem; background: #f5f6f7; }
+.deskApp .sapMLIBSelected .deskLegs .sapMText { background: #fff; }
+.deskApp .deskPill { display: inline-block; min-width: 1.5rem; padding: .125rem .5rem; border-radius: 1rem; background: #eff1f2; text-align: center; font-weight: 600; }
+
+/* The Rebook dialog renders outside the view, so it carries deskApp itself. */
+.sapMDialog.deskApp { border-radius: 1rem; }

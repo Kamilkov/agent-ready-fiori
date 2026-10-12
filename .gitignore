@@ -1,6 +1,7 @@
 node_modules/
 .env
 .DS_Store
+.playwright-cli/
 docs/superpowers/
 runs/dev/
 runs/**/shots/

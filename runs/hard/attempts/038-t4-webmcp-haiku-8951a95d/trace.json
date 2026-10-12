@@ -1,0 +1,955 @@
+{
+  "attemptId": "8951a95d-5b8d-41f2-a769-c38e03e78c47",
+  "position": 38,
+  "task": "t4",
+  "mode": "webmcp",
+  "model": "haiku",
+  "replaces": null,
+  "startedAt": "2026-10-12T09:34:59.602Z",
+  "versions": {
+    "node": "v26.8.2",
+    "anthropicSdk": "0.132.1",
+    "app": "f072d207c740b9eebf7f39c60d4d613b28d6cd66",
+    "chrome": "154.0.8037.98",
+    "chromeDevtoolsMcp": "1.10.1"
+  },
+  "outcome": {
+    "status": "pass",
+    "reason": null
+  },
+  "finalText": "I rebooked Greta, Paul and Nina Weiss (booking WN4R8C) from cancelled ZX 440 onto the connection ZX 470 (FRA–AMS, departs 13:00) and ZX 472 (AMS–JFK, arrives 18:40). All three kept their cabins: Greta in Business, Paul and Nina in Economy.\n\nI skipped the earlier 17:55 option through London (ZX 450 then ZX 460), because ZX 460 has no Business seat left for Greta. The move reported three passengers moved, and I did not re-open the cancelled flight's detail screen to confirm that none are still waiting to be rebooked.",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Flight ZX 440 from Frankfurt (FRA) to New York (JFK) on 9 November is cancelled. Rebook the three passengers with booking reference WN4R8C together onto the connection that arrives in New York earliest and has a free seat in each passenger's cabin, for all three of them, on every flight. Everyone keeps their cabin."
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_015kRue5aAdKEHyMBM5dru57",
+          "name": "get_flight",
+          "input": {
+            "flightId": "ZX 440"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FH5Yn5awyM7JLyDBQALxdp",
+          "name": "find_connections",
+          "input": {
+            "flightId": "ZX 440"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015kRue5aAdKEHyMBM5dru57",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"flight\":{\"id\":\"ZX440\",\"number\":\"ZX 440\",\"from\":\"FRA\",\"to\":\"JFK\",\"departs\":\"2026-11-09T10:00\",\"arrives\":\"2026-11-09T12:45\",\"status\":\"Cancelled\",\"free\":{\"Economy\":0,\"Business\":0}},\"passengers\":[{\"id\":\"h7c2nv\",\"name\":\"Greta Weiss\",\"booking\":\"WN4R8C\",\"cabin\":\"Business\",\"flightIds\":[\"ZX440\"]},{\"id\":\"t4q9mx\",\"name\":\"Paul Weiss\",\"booking\":\"WN4R8C\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]},{\"id\":\"z1r6bd\",\"name\":\"Nina Weiss\",\"booking\":\"WN4R8C\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]},{\"id\":\"e8w3ks\",\"name\":\"Henrik Lund\",\"booking\":\"LM2Q7H\",\"cabin\":\"Business\",\"flightIds\":[\"ZX440\"]},{\"id\":\"n5y7fa\",\"name\":\"Ingrid Lund\",\"booking\":\"LM2Q7H\",\"cabin\":\"Business\",\"flightIds\":[\"ZX440\"]},{\"id\":\"u2j8lc\",\"name\":\"Piotr Dabrowski\",\"booking\":\"PD9X3K\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]},{\"id\":\"a6m1qr\",\"name\":\"Ewa Dabrowska\",\"booking\":\"PD9X3K\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]},{\"id\":\"x9d4wg\",\"name\":\"Kasia Dabrowska\",\"booking\":\"PD9X3K\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]},{\"id\":\"s3v5pe\",\"name\":\"Jakub Dabrowski\",\"booking\":\"PD9X3K\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]},{\"id\":\"g7k2zt\",\"name\":\"Sofia Vidal\",\"booking\":\"SV5J1N\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]},{\"id\":\"d1x8hn\",\"name\":\"Teo Costa\",\"booking\":\"CB8T4F\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]},{\"id\":\"p4f6ry\",\"name\":\"Bia Costa\",\"booking\":\"CB8T4F\",\"cabin\":\"Economy\",\"flightIds\":[\"ZX440\"]}]}"
+            }
+          ],
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FH5Yn5awyM7JLyDBQALxdp",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"cabin\":\"\",\"connections\":[{\"flights\":[{\"id\":\"ZX450\",\"number\":\"ZX 450\",\"from\":\"FRA\",\"to\":\"LHR\",\"departs\":\"2026-11-09T12:00\",\"arrives\":\"2026-11-09T12:45\",\"status\":\"Scheduled\",\"free\":{\"Economy\":8,\"Business\":4}},{\"id\":\"ZX460\",\"number\":\"ZX 460\",\"from\":\"LHR\",\"to\":\"JFK\",\"departs\":\"2026-11-09T15:00\",\"arrives\":\"2026-11-09T17:55\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":0}}],\"arrives\":\"2026-11-09T17:55\",\"changes\":1},{\"flights\":[{\"id\":\"ZX470\",\"number\":\"ZX 470\",\"from\":\"FRA\",\"to\":\"AMS\",\"departs\":\"2026-11-09T13:00\",\"arrives\":\"2026-11-09T14:10\",\"status\":\"Scheduled\",\"free\":{\"Economy\":5,\"Business\":2}},{\"id\":\"ZX472\",\"number\":\"ZX 472\",\"from\":\"AMS\",\"to\":\"JFK\",\"departs\":\"2026-11-09T16:30\",\"arrives\":\"2026-11-09T18:40\",\"status\":\"Scheduled\",\"free\":{\"Economy\":4,\"Business\":2}}],\"arrives\":\"2026-11-09T18:40\",\"changes\":1},{\"flights\":[{\"id\":\"ZX486\",\"number\":\"ZX 486\",\"from\":\"FRA\",\"to\":\"KEF\",\"departs\":\"2026-11-09T13:00\",\"arrives\":\"2026-11-09T15:40\",\"status\":\"Scheduled\",\"free\":{\"Economy\":0,\"Business\":2}},{\"id\":\"ZX488\",\"number\":\"ZX 488\",\"from\":\"KEF\",\"to\":\"JFK\",\"departs\":\"2026-11-09T17:30\",\"arrives\":\"2026-11-09T19:10\",\"status\":\"Scheduled\",\"free\":{\"Economy\":4,\"Business\":0}}],\"arrives\":\"2026-11-09T19:10\",\"changes\":1},{\"flights\":[{\"id\":\"ZX494\",\"number\":\"ZX 494\",\"from\":\"FRA\",\"to\":\"BOS\",\"departs\":\"2026-11-09T13:30\",\"arrives\":\"2026-11-09T16:10\",\"status\":\"Scheduled\",\"free\":{\"Economy\":4,\"Business\":3}},{\"id\":\"ZX490\",\"number\":\"ZX 490\",\"from\":\"BOS\",\"to\":\"JFK\",\"departs\":\"2026-11-09T19:00\",\"arrives\":\"2026-11-09T20:25\",\"status\":\"Scheduled\",\"free\":{\"Economy\":2,\"Business\":2}}],\"arrives\":\"2026-11-09T20:25\",\"changes\":1},{\"flights\":[{\"id\":\"ZX480\",\"number\":\"ZX 480\",\"from\":\"FRA\",\"to\":\"DUB\",\"departs\":\"2026-11-09T11:30\",\"arrives\":\"2026-11-09T12:50\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":2}},{\"id\":\"ZX482\",\"number\":\"ZX 482\",\"from\":\"DUB\",\"to\":\"BOS\",\"departs\":\"2026-11-09T15:00\",\"arrives\":\"2026-11-09T17:10\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":2}},{\"id\":\"ZX490\",\"number\":\"ZX 490\",\"from\":\"BOS\",\"to\":\"JFK\",\"departs\":\"2026-11-09T19:00\",\"arrives\":\"2026-11-09T20:25\",\"status\":\"Scheduled\",\"free\":{\"Economy\":2,\"Business\":2}}],\"arrives\":\"2026-11-09T20:25\",\"changes\":2},{\"flights\":[{\"id\":\"ZX446\",\"number\":\"ZX 446\",\"from\":\"FRA\",\"to\":\"JFK\",\"departs\":\"2026-11-09T18:00\",\"arrives\":\"2026-11-09T20:45\",\"status\":\"Scheduled\",\"free\":{\"Economy\":1,\"Business\":0}}],\"arrives\":\"2026-11-09T20:45\",\"changes\":0},{\"flights\":[{\"id\":\"ZX450\",\"number\":\"ZX 450\",\"from\":\"FRA\",\"to\":\"LHR\",\"departs\":\"2026-11-09T12:00\",\"arrives\":\"2026-11-09T12:45\",\"status\":\"Scheduled\",\"free\":{\"Economy\":8,\"Business\":4}},{\"id\":\"ZX462\",\"number\":\"ZX 462\",\"from\":\"LHR\",\"to\":\"JFK\",\"departs\":\"2026-11-09T19:00\",\"arrives\":\"2026-11-09T21:55\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":1}}],\"arrives\":\"2026-11-09T21:55\",\"changes\":1},{\"flights\":[{\"id\":\"ZX494\",\"number\":\"ZX 494\",\"from\":\"FRA\",\"to\":\"BOS\",\"departs\":\"2026-11-09T13:30\",\"arrives\":\"2026-11-09T16:10\",\"status\":\"Scheduled\",\"free\":{\"Economy\":4,\"Business\":3}},{\"id\":\"ZX492\",\"number\":\"ZX 492\",\"from\":\"BOS\",\"to\":\"JFK\",\"departs\":\"2026-11-09T21:30\",\"arrives\":\"2026-11-09T22:55\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":0}}],\"arrives\":\"2026-11-09T22:55\",\"changes\":1},{\"flights\":[{\"id\":\"ZX480\",\"number\":\"ZX 480\",\"from\":\"FRA\",\"to\":\"DUB\",\"departs\":\"2026-11-09T11:30\",\"arrives\":\"2026-11-09T12:50\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":2}},{\"id\":\"ZX482\",\"number\":\"ZX 482\",\"from\":\"DUB\",\"to\":\"BOS\",\"departs\":\"2026-11-09T15:00\",\"arrives\":\"2026-11-09T17:10\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":2}},{\"id\":\"ZX492\",\"number\":\"ZX 492\",\"from\":\"BOS\",\"to\":\"JFK\",\"departs\":\"2026-11-09T21:30\",\"arrives\":\"2026-11-09T22:55\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":0}}],\"arrives\":\"2026-11-09T22:55\",\"changes\":2},{\"flights\":[{\"id\":\"ZX456\",\"number\":\"ZX 456\",\"from\":\"FRA\",\"to\":\"LHR\",\"departs\":\"2026-11-10T07:00\",\"arrives\":\"2026-11-10T07:45\",\"status\":\"Scheduled\",\"free\":{\"Economy\":6,\"Business\":2}},{\"id\":\"ZX464\",\"number\":\"ZX 464\",\"from\":\"LHR\",\"to\":\"JFK\",\"departs\":\"2026-11-10T10:00\",\"arrives\":\"2026-11-10T12:55\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":2}}],\"arrives\":\"2026-11-10T12:55\",\"changes\":1},{\"flights\":[{\"id\":\"ZX449\",\"number\":\"ZX 449\",\"from\":\"FRA\",\"to\":\"JFK\",\"departs\":\"2026-11-11T10:00\",\"arrives\":\"2026-11-11T12:45\",\"status\":\"Scheduled\",\"free\":{\"Economy\":3,\"Business\":1}}],\"arrives\":\"2026-11-11T12:45\",\"changes\":0}]}"
+            }
+          ],
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "For booking WN4R8C, I need to find a connecting flight pair with free seats: Business for Greta and Economy for Paul and Nina. Checking the earliest arrival option first, ZX450 followed by ZX460, I find ZX460 has zero Business seats available, so that pairing doesn't work.\n\nThe next option arriving at 18:40 — ZX470 (Economy 5, Business 2) connecting to ZX472 (Economy 4, Business 2) — has enough seats for all three passengers, and since the earlier option failed, this is the earliest viable connection. I'll proceed with rebooking onto ZX470 and ZX472.\n\n",
+          "signature": "CAQS6AgKEAgSGAI4AUIIdGhpbmtpbmcSDCY8m5XTbXyLm6AK2xoMZpKzkgf4lfuASGb1IjBWHRYWiSlrWhBlVlMx6qj+AByDaHmRLATepPDJp7Q8jSZqu5t9850ajc1J8BsehwgqhQi9Af4Yyw2e1SQzVZ1RC+hrhZoLQLhEq8zksQjfaF/Mkb4+k9Lv35BonZZVz3V9iK2Dd8DqbeSRINE6ZZRWNKFdnD5Ks1fe9+Rv51h96d+FlGzom18ONWMF3qjLzDTR9tp0iunCBRt1bkXIO+LXH0EMsZrEDGQ/3mGgBy0tbxR0RDgRlG1JvBKV4+JHtMzBWhFQ1CJd3kWRr4C2BUvfwSvzaQ1yQGoMA/YjXZDHVd7ig8PvUK/aqiJ8ftCZmFNZjJzOMgXyveP6w30k+h47leyoxOhZnjbZV/OFBioDoXC+c8On+zeGoLJIu3dxGiIFS9qxd5gbkiy0jwLwnROT3IE8Jdae7h6FdclC1hFidh/pICvXDzsg7C+ogT/HnRrogTUg8Uo/H1XH8lwaHeVtjXyIMjRthxs66JCUG7yQFuFCHMFZj4Uc+o0TnKvCCQTe+0tV4b+RVdJYdsS2Tg3lSgzd15e3vDos+iZvPJPwovECxMVPLTa0PpLSJIh0GcZri5o4fK0i6VsRT6NL+YCC3blFxj4cmmbc/Blhx8NJWRW8mJpl8FB3+uAlobU7lMdp9T6/GKf9adGqWniDvUikLjOxU0/qmwuOWdzGphwns7W6GUTvhpqdtTSN6+ipUBFhibK/vW2Nxd60tphUkcsvxoOpLL6HiPxn8nxqAvxjPjKe6Lb1kEqAcoah/iY+vur+20reYr3QH3ai+EPq5axNwdzIId1xsRRifB6TLyaCVmanoau3Zi5I+l7S6XTECZ5qXhM6dsKguH6h9eHWCiF04ipPRXZ2LcymXCQ3sjvAxCFMgveEFiF3xCLPrROe/RC6gmX5rrB9Ld5d6FNdschSTIeHF86nQxR08GdLEfTb1r0/TykHxfjAPHRBf1mvzvPGab67dT9vIvaUB2W+8Jzz5cU0hlJJY8I8S6bpvo+Rg0BggIwNckVtI8O4xriKSrZkmLGngIiKsbg1JvSWiMGzr+d0D0u9BYnlslp5gBYFdZs8Ipf8XI23IfRX2foyOuwkZiL3V56AVDy+Tqyd+Tkq4lztIZq7YHgeFnVXHvPwqQiT6XToqfJ0Uu+QwWWhGL/WpIPvJ2bjUgFfXWwVGwGP97d6QMuG5/XQ0ljkXhc8COyLwRURjmZdhCdICscIaChkPhllTPbLR7R3c5QwFZ9uDe9YZSjRCpEyqFJCBZBC2vnysQHwMAQzBiAEi4gpen/ODoinWLC8kKoQ8AVKoivWQSCgNuzL223xAP4d9QpCMwRsGVdpfkk/RJK/D6Je9dGLSpeiTvT70l9mtqg0bLSM7ZFtn1xvM97IwOjUAnN+qNIW7V4jJObUl8eBa2r0RMyPHOAeJ5cp0zZ414eLRrPZsCzF8AyJUMAYAQ=="
+        },
+        {
+          "type": "text",
+          "text": "The three WN4R8C passengers are Greta Weiss (Business) and Paul and Nina Weiss (Economy). The connection arriving in New York earliest is FRA–LHR–JFK at 17:55, but ZX 460 has no Business seat, so it fails for Greta. The next option is FRA–AMS–JFK via ZX 470 and ZX 472, arriving 18:40, which has Business and Economy seats on both flights. I'll rebook the three onto it."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01N4ijbQCMXuEux1F4dyMH31",
+          "name": "rebook_onto_connection",
+          "input": {
+            "fromFlightId": "ZX 440",
+            "toFlightIds": [
+              "ZX 470",
+              "ZX 472"
+            ],
+            "passengerIds": [
+              "h7c2nv",
+              "t4q9mx",
+              "z1r6bd"
+            ]
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01N4ijbQCMXuEux1F4dyMH31",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"ok\":true,\"moved\":3,\"to\":[\"ZX 470\",\"ZX 472\"]}"
+            }
+          ],
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I rebooked Greta, Paul and Nina Weiss (booking WN4R8C) from cancelled ZX 440 onto the connection ZX 470 (FRA–AMS, departs 13:00) and ZX 472 (AMS–JFK, arrives 18:40). All three kept their cabins: Greta in Business, Paul and Nina in Economy.\n\nI skipped the earlier 17:55 option through London (ZX 450 then ZX 460), because ZX 460 has no Business seat left for Greta. The move reported three passengers moved, and I did not re-open the cancelled flight's detail screen to confirm that none are still waiting to be rebooked."
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "turn": 1,
+      "ms": 1170,
+      "reservedUsd": 0.048315,
+      "costUsd": 0.000648275,
+      "charged": "billed",
+      "stopReason": "tool_use",
+      "model": "claude-haiku-5-5",
+      "usage": {
+        "input_tokens": 4,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 4763,
+        "output_tokens": 105
+      }
+    },
+    {
+      "turn": 2,
+      "ms": 4104,
+      "reservedUsd": 0.048765,
+      "costUsd": 0.0007643299999999999,
+      "charged": "billed",
+      "stopReason": "tool_use",
+      "model": "claude-haiku-5-5",
+      "usage": {
+        "input_tokens": 2,
+        "cache_read_input_tokens": 4763,
+        "cache_creation_input_tokens": 3276,
+        "output_tokens": 614
+      }
+    },
+    {
+      "turn": 3,
+      "ms": 1503,
+      "reservedUsd": 0.046789375,
+      "costUsd": 0.00027184,
+      "charged": "billed",
+      "stopReason": "end_turn",
+      "model": "claude-haiku-5-5",
+      "usage": {
+        "input_tokens": 2,
+        "cache_read_input_tokens": 8039,
+        "cache_creation_input_tokens": 650,
+        "output_tokens": 220
+      }
+    }
+  ],
+  "toolCalls": [
+    {
+      "turn": 1,
+      "name": "get_flight",
+      "input": {
+        "flightId": "ZX 440"
+      },
+      "isError": false,
+      "ms": 26
+    },
+    {
+      "turn": 1,
+      "name": "find_connections",
+      "input": {
+        "flightId": "ZX 440"
+      },
+      "isError": false,
+      "ms": 12
+    },
+    {
+      "turn": 2,
+      "name": "rebook_onto_connection",
+      "input": {
+        "fromFlightId": "ZX 440",
+        "toFlightIds": [
+          "ZX 470",
+          "ZX 472"
+        ],
+        "passengerIds": [
+          "h7c2nv",
+          "t4q9mx",
+          "z1r6bd"
+        ]
+      },
+      "isError": false,
+      "ms": 34
+    }
+  ],
+  "totals": {
+    "turns": 3,
+    "toolCalls": {
+      "get_flight": 1,
+      "find_connections": 1,
+      "rebook_onto_connection": 1
+    },
+    "toolErrors": 0,
+    "tokens": {
+      "input": 8,
+      "cacheRead": 12802,
+      "cacheWrite": 8689,
+      "output": 939
+    },
+    "costUsd": 0.001684445,
+    "unresolvedUsd": 0,
+    "ms": 6988
+  },
+  "cacheReadOnFirstRequest": 0,
+  "appData": {
+    "flights": [
+      {
+        "id": "ZX400",
+        "number": "ZX 400",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-02T10:00",
+        "arrives": "2026-11-02T12:45",
+        "status": "Cancelled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX402",
+        "number": "ZX 402",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-02T18:00",
+        "arrives": "2026-11-02T20:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 2,
+          "Business": 1
+        }
+      },
+      {
+        "id": "ZX404",
+        "number": "ZX 404",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-03T07:00",
+        "arrives": "2026-11-03T09:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX406",
+        "number": "ZX 406",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-03T10:00",
+        "arrives": "2026-11-03T12:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 6,
+          "Business": 4
+        }
+      },
+      {
+        "id": "ZX401",
+        "number": "ZX 401",
+        "from": "JFK",
+        "to": "FRA",
+        "departs": "2026-11-01T22:00",
+        "arrives": "2026-11-02T12:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 7,
+          "Business": 3
+        }
+      },
+      {
+        "id": "ZX403",
+        "number": "ZX 403",
+        "from": "JFK",
+        "to": "FRA",
+        "departs": "2026-11-02T22:00",
+        "arrives": "2026-11-03T12:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 1,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX410",
+        "number": "ZX 410",
+        "from": "FRA",
+        "to": "LHR",
+        "departs": "2026-11-01T08:00",
+        "arrives": "2026-11-01T08:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 12,
+          "Business": 4
+        }
+      },
+      {
+        "id": "ZX412",
+        "number": "ZX 412",
+        "from": "FRA",
+        "to": "LHR",
+        "departs": "2026-11-02T12:00",
+        "arrives": "2026-11-02T12:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 5,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX418",
+        "number": "ZX 418",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-01T15:00",
+        "arrives": "2026-11-01T18:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 4,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX420",
+        "number": "ZX 420",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-02T09:00",
+        "arrives": "2026-11-02T12:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 9,
+          "Business": 6
+        }
+      },
+      {
+        "id": "ZX422",
+        "number": "ZX 422",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-03T11:00",
+        "arrives": "2026-11-03T14:00",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 1
+        }
+      },
+      {
+        "id": "ZX424",
+        "number": "ZX 424",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-02T08:00",
+        "arrives": "2026-11-02T11:00",
+        "status": "Cancelled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX440",
+        "number": "ZX 440",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-09T10:00",
+        "arrives": "2026-11-09T12:45",
+        "status": "Cancelled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX444",
+        "number": "ZX 444",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-09T09:30",
+        "arrives": "2026-11-09T12:30",
+        "status": "Cancelled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX446",
+        "number": "ZX 446",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-09T18:00",
+        "arrives": "2026-11-09T20:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 1,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX448",
+        "number": "ZX 448",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-10T10:00",
+        "arrives": "2026-11-10T12:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 0,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX449",
+        "number": "ZX 449",
+        "from": "FRA",
+        "to": "JFK",
+        "departs": "2026-11-11T10:00",
+        "arrives": "2026-11-11T12:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 1
+        }
+      },
+      {
+        "id": "ZX445",
+        "number": "ZX 445",
+        "from": "MUC",
+        "to": "JFK",
+        "departs": "2026-11-10T09:30",
+        "arrives": "2026-11-10T12:30",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 0,
+          "Business": 1
+        }
+      },
+      {
+        "id": "ZX450",
+        "number": "ZX 450",
+        "from": "FRA",
+        "to": "LHR",
+        "departs": "2026-11-09T12:00",
+        "arrives": "2026-11-09T12:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 8,
+          "Business": 4
+        }
+      },
+      {
+        "id": "ZX456",
+        "number": "ZX 456",
+        "from": "FRA",
+        "to": "LHR",
+        "departs": "2026-11-10T07:00",
+        "arrives": "2026-11-10T07:45",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 6,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX454",
+        "number": "ZX 454",
+        "from": "MUC",
+        "to": "LHR",
+        "departs": "2026-11-09T11:00",
+        "arrives": "2026-11-09T12:10",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 5,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX460",
+        "number": "ZX 460",
+        "from": "LHR",
+        "to": "JFK",
+        "departs": "2026-11-09T15:00",
+        "arrives": "2026-11-09T17:55",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX462",
+        "number": "ZX 462",
+        "from": "LHR",
+        "to": "JFK",
+        "departs": "2026-11-09T19:00",
+        "arrives": "2026-11-09T21:55",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 1
+        }
+      },
+      {
+        "id": "ZX464",
+        "number": "ZX 464",
+        "from": "LHR",
+        "to": "JFK",
+        "departs": "2026-11-10T10:00",
+        "arrives": "2026-11-10T12:55",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX470",
+        "number": "ZX 470",
+        "from": "FRA",
+        "to": "AMS",
+        "departs": "2026-11-09T13:00",
+        "arrives": "2026-11-09T14:10",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 1
+        }
+      },
+      {
+        "id": "ZX474",
+        "number": "ZX 474",
+        "from": "MUC",
+        "to": "AMS",
+        "departs": "2026-11-09T11:30",
+        "arrives": "2026-11-09T13:05",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 4,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX472",
+        "number": "ZX 472",
+        "from": "AMS",
+        "to": "JFK",
+        "departs": "2026-11-09T16:30",
+        "arrives": "2026-11-09T18:40",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 2,
+          "Business": 1
+        }
+      },
+      {
+        "id": "ZX480",
+        "number": "ZX 480",
+        "from": "FRA",
+        "to": "DUB",
+        "departs": "2026-11-09T11:30",
+        "arrives": "2026-11-09T12:50",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX482",
+        "number": "ZX 482",
+        "from": "DUB",
+        "to": "BOS",
+        "departs": "2026-11-09T15:00",
+        "arrives": "2026-11-09T17:10",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX486",
+        "number": "ZX 486",
+        "from": "FRA",
+        "to": "KEF",
+        "departs": "2026-11-09T13:00",
+        "arrives": "2026-11-09T15:40",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 0,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX488",
+        "number": "ZX 488",
+        "from": "KEF",
+        "to": "JFK",
+        "departs": "2026-11-09T17:30",
+        "arrives": "2026-11-09T19:10",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 4,
+          "Business": 0
+        }
+      },
+      {
+        "id": "ZX494",
+        "number": "ZX 494",
+        "from": "FRA",
+        "to": "BOS",
+        "departs": "2026-11-09T13:30",
+        "arrives": "2026-11-09T16:10",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 4,
+          "Business": 3
+        }
+      },
+      {
+        "id": "ZX490",
+        "number": "ZX 490",
+        "from": "BOS",
+        "to": "JFK",
+        "departs": "2026-11-09T19:00",
+        "arrives": "2026-11-09T20:25",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 2,
+          "Business": 2
+        }
+      },
+      {
+        "id": "ZX492",
+        "number": "ZX 492",
+        "from": "BOS",
+        "to": "JFK",
+        "departs": "2026-11-09T21:30",
+        "arrives": "2026-11-09T22:55",
+        "status": "Scheduled",
+        "free": {
+          "Economy": 3,
+          "Business": 0
+        }
+      }
+    ],
+    "passengers": [
+      {
+        "id": "c4m8pz",
+        "name": "Jan Horvat",
+        "booking": "HZ4K7Q",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX400"
+        ]
+      },
+      {
+        "id": "r2x7kd",
+        "name": "Maja Horvat",
+        "booking": "HZ4K7Q",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX400"
+        ]
+      },
+      {
+        "id": "w9t3fq",
+        "name": "Luka Horvat",
+        "booking": "HZ4K7Q",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX400"
+        ]
+      },
+      {
+        "id": "b6n1vj",
+        "name": "Elena Rossi",
+        "booking": "RS2M9D",
+        "cabin": "Business",
+        "flightIds": [
+          "ZX400"
+        ]
+      },
+      {
+        "id": "y3h5sl",
+        "name": "Marco Rossi",
+        "booking": "RS2M9D",
+        "cabin": "Business",
+        "flightIds": [
+          "ZX400"
+        ]
+      },
+      {
+        "id": "q7d2ax",
+        "name": "Anna Novak",
+        "booking": "NV8P2L",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX400"
+        ]
+      },
+      {
+        "id": "f5k9re",
+        "name": "Tom Berger",
+        "booking": "BG5J3R",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX400"
+        ]
+      },
+      {
+        "id": "m1z6wu",
+        "name": "Sara Lind",
+        "booking": "LD9C6W",
+        "cabin": "Business",
+        "flightIds": [
+          "ZX400"
+        ]
+      },
+      {
+        "id": "k8p4ty",
+        "name": "Ivo Petrov",
+        "booking": "PT3F8N",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX424"
+        ]
+      },
+      {
+        "id": "j2s7gn",
+        "name": "Lea Weber",
+        "booking": "WB6H2K",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX424"
+        ]
+      },
+      {
+        "id": "h7c2nv",
+        "name": "Greta Weiss",
+        "booking": "WN4R8C",
+        "cabin": "Business",
+        "flightIds": [
+          "ZX470",
+          "ZX472"
+        ]
+      },
+      {
+        "id": "t4q9mx",
+        "name": "Paul Weiss",
+        "booking": "WN4R8C",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX470",
+          "ZX472"
+        ]
+      },
+      {
+        "id": "z1r6bd",
+        "name": "Nina Weiss",
+        "booking": "WN4R8C",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX470",
+          "ZX472"
+        ]
+      },
+      {
+        "id": "e8w3ks",
+        "name": "Henrik Lund",
+        "booking": "LM2Q7H",
+        "cabin": "Business",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "n5y7fa",
+        "name": "Ingrid Lund",
+        "booking": "LM2Q7H",
+        "cabin": "Business",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "u2j8lc",
+        "name": "Piotr Dabrowski",
+        "booking": "PD9X3K",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "a6m1qr",
+        "name": "Ewa Dabrowska",
+        "booking": "PD9X3K",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "x9d4wg",
+        "name": "Kasia Dabrowska",
+        "booking": "PD9X3K",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "s3v5pe",
+        "name": "Jakub Dabrowski",
+        "booking": "PD9X3K",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "g7k2zt",
+        "name": "Sofia Vidal",
+        "booking": "SV5J1N",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "d1x8hn",
+        "name": "Teo Costa",
+        "booking": "CB8T4F",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "p4f6ry",
+        "name": "Bia Costa",
+        "booking": "CB8T4F",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX440"
+        ]
+      },
+      {
+        "id": "v9a3mc",
+        "name": "Hugo Brandt",
+        "booking": "HB3K9W",
+        "cabin": "Business",
+        "flightIds": [
+          "ZX444"
+        ]
+      },
+      {
+        "id": "k2n7ue",
+        "name": "Mila Brandt",
+        "booking": "HB3K9W",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX444"
+        ]
+      },
+      {
+        "id": "b5t1xw",
+        "name": "Omar Rahimi",
+        "booking": "OR6M2D",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX444"
+        ]
+      },
+      {
+        "id": "m8g4jd",
+        "name": "Leila Rahimi",
+        "booking": "OR6M2D",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX444"
+        ]
+      },
+      {
+        "id": "r3e9vk",
+        "name": "Sami Rahimi",
+        "booking": "OR6M2D",
+        "cabin": "Economy",
+        "flightIds": [
+          "ZX444"
+        ]
+      },
+      {
+        "id": "f6p2ql",
+        "name": "Erik Kask",
+        "booking": "EK1V7P",
+        "cabin": "Business",
+        "flightIds": [
+          "ZX444"
+        ]
+      }
+    ]
+  },
+  "grade": {
+    "pass": true,
+    "differences": [],
+    "groups": {
+      "right": 1,
+      "total": 1
+    }
+  }
+}

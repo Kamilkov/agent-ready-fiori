@@ -1,0 +1,453 @@
+{
+  "request": {
+    "model": "claude-opus-5-5",
+    "max_tokens": 16000,
+    "thinking": {
+      "type": "adaptive",
+      "display": "summarized"
+    },
+    "output_config": {
+      "effort": "medium"
+    },
+    "cache_control": {
+      "type": "ephemeral"
+    }
+  },
+  "tools": [
+    {
+      "name": "take_snapshot",
+      "description": "Take a text snapshot of the target page based on the a11y tree. The snapshot lists page elements along with a unique\nidentifier (uid). Always use the latest snapshot. Prefer taking a snapshot over taking a screenshot. The snapshot indicates the element selected\nin the DevTools Elements panel (if any).",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "verbose": {
+            "description": "Whether to include all possible information available in the full a11y tree. Default is false.",
+            "type": "boolean"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "click",
+      "description": "Clicks on the provided element",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "description": "The uid of an element on the page from the page content snapshot"
+          },
+          "dblClick": {
+            "description": "Set to true for double clicks. Default is false.",
+            "type": "boolean"
+          },
+          "includeSnapshot": {
+            "description": "Whether to include a snapshot in the response. Default is false.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "uid"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "fill",
+      "description": "Type text into an input, text area or select an option from a <select> element.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "description": "The uid of an element on the page from the page content snapshot"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value to fill in. \"true\" or \"false\" for checkboxes and toggles, \"true\" for radio buttons."
+          },
+          "includeSnapshot": {
+            "description": "Whether to include a snapshot in the response. Default is false.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "uid",
+          "value"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "fill_form",
+      "description": "Fill out multiple form elements (inputs, selects, checkboxes, radios) at once. ALWAYS prefer this tool over multiple individual 'fill' or 'click' calls when interacting with forms. It is significantly faster, more reliable, and reduces turn count. Example: Fill username, password, and check \"Remember Me\" in one call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "elements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uid": {
+                  "type": "string",
+                  "description": "The uid of the element to fill out"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Value for the element. \"true\" or \"false\" for checkboxes and toggles, \"true\" for radio buttons."
+                }
+              },
+              "required": [
+                "uid",
+                "value"
+              ],
+              "description": "An element to fill out"
+            },
+            "description": "Elements from snapshot to fill out."
+          },
+          "includeSnapshot": {
+            "description": "Whether to include a snapshot in the response. Default is false.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "elements"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "press_key",
+      "description": "Press a key or key combination. Use this when other input methods like fill() cannot be used (e.g., keyboard shortcuts, navigation keys, or special key combinations).",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "A key or a combination (e.g., \"Enter\", \"Control+A\", \"Control++\", \"Control+Shift+R\"). Modifiers: Control, Shift, Alt, Meta"
+          },
+          "includeSnapshot": {
+            "description": "Whether to include a snapshot in the response. Default is false.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "type_text",
+      "description": "Type text using keyboard into a previously focused input",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The text to type"
+          },
+          "submitKey": {
+            "description": "Optional key to press after typing. E.g., \"Enter\", \"Tab\", \"Escape\"",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "hover",
+      "description": "Hover over the provided element",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "description": "The uid of an element on the page from the page content snapshot"
+          },
+          "includeSnapshot": {
+            "description": "Whether to include a snapshot in the response. Default is false.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "uid"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "wait_for",
+      "description": "Wait for the specified text to appear on the selected page.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Non-empty list of texts. Resolves when any value appears on the page."
+          },
+          "timeout": {
+            "description": "Maximum wait time in milliseconds. If set to 0, the default timeout will be used.",
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "handle_dialog",
+      "description": "If a browser dialog was opened, use this command to handle it",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "accept",
+              "dismiss"
+            ],
+            "description": "Whether to dismiss or accept the dialog"
+          },
+          "promptText": {
+            "description": "Optional prompt text to enter into the dialog.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "take_screenshot",
+      "description": "Take a screenshot of the page or element.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "default": "png",
+            "description": "Type of format to save the screenshot as. Default is \"png\"",
+            "type": "string",
+            "enum": [
+              "png",
+              "jpeg",
+              "webp"
+            ]
+          },
+          "quality": {
+            "description": "Compression quality for JPEG and WebP formats (0-100). Higher values mean better quality but larger file sizes. Ignored for PNG format.",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "uid": {
+            "description": "The uid of an element on the page from the page content snapshot. If omitted, takes a page screenshot.",
+            "type": "string"
+          },
+          "fullPage": {
+            "description": "If set to true takes a screenshot of the full page instead of the currently visible viewport. Incompatible with uid.",
+            "type": "boolean"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "search_flights",
+      "description": "Lists flights sorted by departure, optionally filtered by departure airport, arrival airport, departure date and status. Shows the result on the Flights screen. Each flight has id, number, from, to, departs and arrives (local times), status and free seats per cabin.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Departure airport code, e.g. \"FRA\""
+          },
+          "to": {
+            "type": "string",
+            "description": "Arrival airport code, e.g. \"JFK\""
+          },
+          "date": {
+            "type": "string",
+            "description": "Departure date, YYYY-MM-DD"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Scheduled",
+              "Cancelled"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_flight",
+      "description": "Opens a flight's detail screen and returns the flight with its free seats per cabin and the passengers booked on it (id, name, booking reference, cabin, and flightIds: all the flights they are booked on, in order).",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "flightId": {
+            "type": "string",
+            "description": "Flight number, e.g. \"ZX 402\" or \"ZX402\""
+          }
+        },
+        "required": [
+          "flightId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_alternatives",
+      "description": "For a cancelled flight, lists the flights its passengers may be rebooked onto: same route, scheduled, departing later, with free seats per cabin. With a cabin, only flights that have a free seat in that cabin.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "flightId": {
+            "type": "string",
+            "description": "Flight number, e.g. \"ZX 402\" or \"ZX402\""
+          },
+          "cabin": {
+            "type": "string",
+            "enum": [
+              "Economy",
+              "Business"
+            ]
+          }
+        },
+        "required": [
+          "flightId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "rebook_passengers",
+      "description": "Moves passengers of a cancelled flight onto another flight; each keeps their cabin. Every rule is checked first: if any check fails, nothing changes and the error says why. Afterwards the cancelled flight's detail screen shows the passengers still to rebook.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "fromFlightId": {
+            "type": "string",
+            "description": "Flight number, e.g. \"ZX 402\" or \"ZX402\""
+          },
+          "toFlightId": {
+            "type": "string",
+            "description": "Flight number, e.g. \"ZX 402\" or \"ZX402\""
+          },
+          "passengerIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "Passenger ids from get_flight"
+          }
+        },
+        "required": [
+          "fromFlightId",
+          "toFlightId",
+          "passengerIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "find_connections",
+      "description": "For a cancelled flight, lists every connection its passengers may be rebooked onto: 1 to 3 scheduled flights in order (a direct flight is a connection of one) from its departure airport to its arrival airport, the first leaving after it and by the end of the second day after its departure date, 90 minutes to 12 hours for each change, no airport twice, and a free seat on every flight. Sorted by arrival, then fewer changes. Each connection has its flights (id, number, from, to, departs, arrives, free seats per cabin; local times), arrives and changes. With a cabin, every flight has a free seat in that cabin. Whether a whole group fits is not checked: compare each flight's free seats with the group's cabins. Opens the flight's Connections screen.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "flightId": {
+            "type": "string",
+            "description": "Flight number, e.g. \"ZX 402\" or \"ZX402\""
+          },
+          "cabin": {
+            "type": "string",
+            "enum": [
+              "Economy",
+              "Business"
+            ]
+          }
+        },
+        "required": [
+          "flightId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "rebook_onto_connection",
+      "description": "Moves passengers of a cancelled flight onto a connection of 1 to 3 flights in one step, e.g. one from find_connections; each keeps their cabin and is booked on all of the connection's flights. Every rule is checked first, including enough free seats in each passenger's cabin on every flight: if any check fails, nothing changes and the error says why. Afterwards the cancelled flight's detail screen shows the passengers still to rebook.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "fromFlightId": {
+            "type": "string",
+            "description": "Flight number, e.g. \"ZX 402\" or \"ZX402\""
+          },
+          "toFlightIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 3,
+            "description": "The connection's flights in order, e.g. [\"ZX 450\", \"ZX 460\"]"
+          },
+          "passengerIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "Passenger ids from get_flight"
+          }
+        },
+        "required": [
+          "fromFlightId",
+          "toFlightIds",
+          "passengerIds"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "launchArgs": [
+    "--isolated",
+    "--usageStatistics=false",
+    "--performanceCrux=false",
+    "--viewport=1280x900",
+    "--experimentalStructuredContent=true",
+    "--pageIdRouting=false",
+    "--headless",
+    "--chromeArg=--enable-features=WebMCP",
+    "--categoryExperimentalWebmcp=true"
+  ]
+}

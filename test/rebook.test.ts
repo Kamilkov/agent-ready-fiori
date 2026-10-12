@@ -5,7 +5,7 @@ import { rules, startData, type DeskData, type Result } from '../bench/desk.ts'
 const ANNA = 'q7d2ax', SARA = 'm1z6wu', ELENA = 'b6n1vj', MARCO = 'y3h5sl', IVO = 'k8p4ty'
 const HORVATS = ['c4m8pz', 'r2x7kd', 'w9t3fq']
 const flight = (d: DeskData, id: string) => d.flights.find(f => f.id === id)!
-const on = (d: DeskData, id: string) => d.passengers.find(p => p.id === id)!.flightId
+const on = (d: DeskData, id: string) => d.passengers.find(p => p.id === id)!.flightIds
 const ids = (r: Result<{ flights: { id: string }[] }>) => (r.ok ? r.flights.map(f => f.id) : r.error)
 
 /** A rejected rebooking returns the error and leaves every flight and passenger as it was. */
@@ -16,13 +16,13 @@ function rejects(input: unknown, error: string, d = startData()) {
 }
 
 test('search: flights by departure; filters combine; values are normalized like the screen does', () => {
-  assert.deepEqual(ids(rules.searchFlights(startData(), { from: 'FRA', to: 'JFK' })), ['ZX400', 'ZX402', 'ZX404', 'ZX406'])
+  assert.deepEqual(ids(rules.searchFlights(startData(), { from: 'FRA', to: 'JFK' })), ['ZX400', 'ZX402', 'ZX404', 'ZX406', 'ZX440', 'ZX446', 'ZX448', 'ZX449'])
   assert.deepEqual(ids(rules.searchFlights(startData(), { from: ' fra', to: 'jfk ', date: '2026-11-03' })), ['ZX404', 'ZX406'])
-  assert.deepEqual(ids(rules.searchFlights(startData(), { status: 'cancelled' })), ['ZX424', 'ZX400'])
+  assert.deepEqual(ids(rules.searchFlights(startData(), { status: 'cancelled' })), ['ZX424', 'ZX400', 'ZX444', 'ZX440'])
   assert.deepEqual(ids(rules.searchFlights(startData(), { status: 'Delayed' })), [])
   const all = rules.searchFlights(startData())
   assert.ok(all.ok)
-  assert.equal(all.flights.length, 12)
+  assert.equal(all.flights.length, 34)
   assert.deepEqual(all.filters, { from: '', to: '', date: '', status: '' })
 })
 
@@ -39,9 +39,9 @@ test('get_flight: "ZX 400", "zx400" and "ZX400" are the same flight, with its 8 
 })
 
 test('alternatives: same route, scheduled, later; a cabin keeps the flights with a free seat in it', () => {
-  assert.deepEqual(ids(rules.alternatives(startData(), 'ZX400')), ['ZX402', 'ZX404', 'ZX406'])
-  assert.deepEqual(ids(rules.alternatives(startData(), 'zx 400', ' business')), ['ZX402', 'ZX406'])
-  assert.deepEqual(ids(rules.alternatives(startData(), 'ZX424')), ['ZX420', 'ZX422'])
+  assert.deepEqual(ids(rules.alternatives(startData(), 'ZX400')), ['ZX402', 'ZX404', 'ZX406', 'ZX446', 'ZX448', 'ZX449'])
+  assert.deepEqual(ids(rules.alternatives(startData(), 'zx 400', ' business')), ['ZX402', 'ZX406', 'ZX449'])
+  assert.deepEqual(ids(rules.alternatives(startData(), 'ZX424')), ['ZX420', 'ZX422', 'ZX445'])
   assert.deepEqual(rules.alternatives(startData(), 'ZX402'), { ok: false, error: 'ZX 402 is not cancelled' })
   assert.deepEqual(rules.alternatives(startData(), 'ZX400', 'First'), { ok: false, error: 'Cabin must be Economy or Business' })
   assert.deepEqual(rules.alternatives(startData(), 'ZX999'), { ok: false, error: 'Flight ZX999 does not exist' })
@@ -50,7 +50,7 @@ test('alternatives: same route, scheduled, later; a cabin keeps the flights with
 test('rebook: Anna moves to ZX 402, its economy seats drop by one, ZX 400 itself is unchanged', () => {
   const d = startData(), zx400 = structuredClone(flight(d, 'ZX400'))
   assert.deepEqual(rules.rebook(d, { fromFlightId: 'ZX 400', toFlightId: 'zx402', passengerIds: [ANNA] }), { ok: true, moved: 1, to: 'ZX 402' })
-  assert.equal(on(d, ANNA), 'ZX402')
+  assert.deepEqual(on(d, ANNA), ['ZX402'])
   assert.deepEqual(flight(d, 'ZX402').free, { Economy: 1, Business: 1 })
   assert.deepEqual(flight(d, 'ZX400'), zx400)
 })

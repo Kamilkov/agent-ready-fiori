@@ -1,0 +1,152 @@
+{
+  "seed": 20261009,
+  "runs": 1,
+  "slots": [
+    {
+      "pos": 0,
+      "task": "t4",
+      "mode": "webmcp",
+      "model": "haiku"
+    },
+    {
+      "pos": 1,
+      "task": "t5",
+      "mode": "ui",
+      "model": "opus"
+    },
+    {
+      "pos": 2,
+      "task": "t5",
+      "mode": "ui",
+      "model": "haiku"
+    },
+    {
+      "pos": 3,
+      "task": "t5",
+      "mode": "webmcp",
+      "model": "opus"
+    },
+    {
+      "pos": 4,
+      "task": "t5",
+      "mode": "webmcp",
+      "model": "haiku"
+    },
+    {
+      "pos": 5,
+      "task": "t4",
+      "mode": "ui",
+      "model": "opus"
+    },
+    {
+      "pos": 6,
+      "task": "t4",
+      "mode": "webmcp",
+      "model": "opus"
+    },
+    {
+      "pos": 7,
+      "task": "t4",
+      "mode": "ui",
+      "model": "haiku"
+    }
+  ],
+  "attempts": [
+    {
+      "id": "d48969b4-4945-4b37-93f0-296ff383bd42",
+      "pos": 0,
+      "dir": "000-t4-webmcp-haiku-d48969b4",
+      "task": "t4",
+      "mode": "webmcp",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.0017296649999999998,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "7b10a7c4-38a6-4332-8ea5-93726c9d228e",
+      "pos": 1,
+      "dir": "001-t5-ui-opus-7b10a7c4",
+      "task": "t5",
+      "mode": "ui",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 2.622497,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "15acdf92-3da0-4607-9991-7051eaf29bc3",
+      "pos": 2,
+      "dir": "002-t5-ui-haiku-15acdf92",
+      "task": "t5",
+      "mode": "ui",
+      "model": "haiku",
+      "status": "fail",
+      "reason": "wrong_result",
+      "costUsd": 0.7014047850000001,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "4270ff0c-03d3-4b86-b539-e68977e37178",
+      "pos": 3,
+      "dir": "003-t5-webmcp-opus-4270ff0c",
+      "task": "t5",
+      "mode": "webmcp",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.1189674,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "493aef9a-9d6d-4516-90eb-a34411b27290",
+      "pos": 4,
+      "dir": "004-t5-webmcp-haiku-493aef9a",
+      "task": "t5",
+      "mode": "webmcp",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.00631814,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "855cea21-b457-4c1a-96d5-1362d15e5719",
+      "pos": 5,
+      "dir": "005-t4-ui-opus-855cea21",
+      "task": "t4",
+      "mode": "ui",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.4260142,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "7344bacf-36bd-4fd0-926d-589507c189af",
+      "pos": 6,
+      "dir": "006-t4-webmcp-opus-7344bacf",
+      "task": "t4",
+      "mode": "webmcp",
+      "model": "opus",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.0559562,
+      "unresolvedUsd": 0
+    },
+    {
+      "id": "54b205f6-1818-4f7b-920e-7802ba3b9cd1",
+      "pos": 7,
+      "dir": "007-t4-ui-haiku-54b205f6",
+      "task": "t4",
+      "mode": "ui",
+      "model": "haiku",
+      "status": "pass",
+      "reason": null,
+      "costUsd": 0.012101095,
+      "unresolvedUsd": 0
+    }
+  ]
+}

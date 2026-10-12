@@ -1,0 +1,804 @@
+{
+  "set": "hard",
+  "generatedAt": "2026-10-12T16:12:27.353Z",
+  "revision": null,
+  "traceBase": null,
+  "seed": 20261009,
+  "runsPerCell": 5,
+  "dates": {
+    "first": "2026-10-12T08:44:43.459Z",
+    "last": "2026-10-12T09:35:08.712Z"
+  },
+  "versions": {
+    "chrome": [
+      "154.0.8037.98"
+    ],
+    "chromeDevtoolsMcp": [
+      "1.10.1"
+    ],
+    "anthropicSdk": [
+      "0.132.1"
+    ],
+    "node": [
+      "v26.8.2"
+    ],
+    "app": [
+      "f072d207c740b9eebf7f39c60d4d613b28d6cd66"
+    ],
+    "models": [
+      "claude-haiku-5-5",
+      "claude-opus-5-5"
+    ]
+  },
+  "cacheLeaks": [],
+  "cells": [
+    {
+      "task": "t4",
+      "mode": "ui",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": {
+        "scores": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "right": 5,
+        "total": 5,
+        "ungraded": 0
+      },
+      "stats": {
+        "turns": {
+          "median": 6,
+          "min": 6,
+          "max": 8
+        },
+        "input": {
+          "median": 14,
+          "min": 14,
+          "max": 18
+        },
+        "cacheRead": {
+          "median": 179721,
+          "min": 170208,
+          "max": 296207
+        },
+        "cacheWrite": {
+          "median": 72496,
+          "min": 63005,
+          "max": 82634
+        },
+        "output": {
+          "median": 1398,
+          "min": 1238,
+          "max": 1652
+        },
+        "costUsd": {
+          "median": 0.423912,
+          "min": 0.3771626,
+          "max": 0.5055234
+        },
+        "seconds": {
+          "median": 25.185,
+          "min": 20.052,
+          "max": 38.304
+        }
+      },
+      "spendUsd": 2.1576910000000002,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.43153820000000004,
+      "cacheReadShare": 0.7345835868437064,
+      "replay": {
+        "dir": "008-t4-ui-opus-b1204b2e",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "008-t4-ui-opus-b1204b2e",
+          "pos": 8,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "025-t4-ui-opus-7ab14b7f",
+          "pos": 25,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "030-t4-ui-opus-fa689f68",
+          "pos": 30,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "034-t4-ui-opus-5db6b5ca",
+          "pos": 34,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "037-t4-ui-opus-0147633f",
+          "pos": 37,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t4",
+      "mode": "webmcp",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": {
+        "scores": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "right": 5,
+        "total": 5,
+        "ungraded": 0
+      },
+      "stats": {
+        "turns": {
+          "median": 3,
+          "min": 3,
+          "max": 3
+        },
+        "input": {
+          "median": 8,
+          "min": 8,
+          "max": 8
+        },
+        "cacheRead": {
+          "median": 12800,
+          "min": 12794,
+          "max": 12810
+        },
+        "cacheWrite": {
+          "median": 8302,
+          "min": 8291,
+          "max": 8385
+        },
+        "output": {
+          "median": 623,
+          "min": 567,
+          "max": 683
+        },
+        "costUsd": {
+          "median": 0.0565058,
+          "min": 0.055417,
+          "max": 0.0581778
+        },
+        "seconds": {
+          "median": 8.254,
+          "min": 8.03,
+          "max": 11.061
+        }
+      },
+      "spendUsd": 0.2833908,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.05667816,
+      "cacheReadShare": 0.6059722406316865,
+      "replay": {
+        "dir": "002-t4-webmcp-opus-69c87431",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "002-t4-webmcp-opus-69c87431",
+          "pos": 2,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "020-t4-webmcp-opus-edd9d38c",
+          "pos": 20,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "028-t4-webmcp-opus-a7081b85",
+          "pos": 28,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "029-t4-webmcp-opus-8ba0effc",
+          "pos": 29,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "031-t4-webmcp-opus-f45b61b6",
+          "pos": 31,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t4",
+      "mode": "ui",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": {
+        "scores": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "right": 5,
+        "total": 5,
+        "ungraded": 0
+      },
+      "stats": {
+        "turns": {
+          "median": 6,
+          "min": 6,
+          "max": 7
+        },
+        "input": {
+          "median": 14,
+          "min": 14,
+          "max": 16
+        },
+        "cacheRead": {
+          "median": 180657,
+          "min": 180599,
+          "max": 206672
+        },
+        "cacheWrite": {
+          "median": 73443,
+          "min": 73385,
+          "max": 75029
+        },
+        "output": {
+          "median": 2072,
+          "min": 2030,
+          "max": 2452
+        },
+        "costUsd": {
+          "median": 0.012016515000000002,
+          "min": 0.012000019999999998,
+          "max": 0.012547945
+        },
+        "seconds": {
+          "median": 19.938,
+          "min": 18.826,
+          "max": 23.28
+        }
+      },
+      "spendUsd": 0.06084960999999999,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.012169921999999998,
+      "cacheReadShare": 0.7157180772633441,
+      "replay": {
+        "dir": "001-t4-ui-haiku-5af6ec2e",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "001-t4-ui-haiku-5af6ec2e",
+          "pos": 1,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "004-t4-ui-haiku-74b04874",
+          "pos": 4,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "015-t4-ui-haiku-67c43026",
+          "pos": 15,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "026-t4-ui-haiku-997770ce",
+          "pos": 26,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "039-t4-ui-haiku-5d136a67",
+          "pos": 39,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t4",
+      "mode": "webmcp",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": {
+        "scores": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "right": 5,
+        "total": 5,
+        "ungraded": 0
+      },
+      "stats": {
+        "turns": {
+          "median": 4,
+          "min": 3,
+          "max": 4
+        },
+        "input": {
+          "median": 10,
+          "min": 8,
+          "max": 10
+        },
+        "cacheRead": {
+          "median": 18454,
+          "min": 12802,
+          "max": 18504
+        },
+        "cacheWrite": {
+          "median": 8611,
+          "min": 7507,
+          "max": 8699
+        },
+        "output": {
+          "median": 898,
+          "min": 853,
+          "max": 1081
+        },
+        "costUsd": {
+          "median": 0.001699915,
+          "min": 0.001539325,
+          "max": 0.001813915
+        },
+        "seconds": {
+          "median": 9.111,
+          "min": 6.988,
+          "max": 10.361
+        }
+      },
+      "spendUsd": 0.008448815,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.001689763,
+      "cacheReadShare": 0.6700145605987068,
+      "replay": {
+        "dir": "000-t4-webmcp-haiku-eb1d07dd",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "000-t4-webmcp-haiku-eb1d07dd",
+          "pos": 0,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "003-t4-webmcp-haiku-06257136",
+          "pos": 3,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "007-t4-webmcp-haiku-40a578cc",
+          "pos": 7,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "012-t4-webmcp-haiku-caa263f0",
+          "pos": 12,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "038-t4-webmcp-haiku-8951a95d",
+          "pos": 38,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t5",
+      "mode": "ui",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": {
+        "scores": [
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "right": 40,
+        "total": 40,
+        "ungraded": 0
+      },
+      "stats": {
+        "turns": {
+          "median": 39,
+          "min": 34,
+          "max": 46
+        },
+        "input": {
+          "median": 80,
+          "min": 70,
+          "max": 94
+        },
+        "cacheRead": {
+          "median": 4741520,
+          "min": 4289922,
+          "max": 7327160
+        },
+        "cacheWrite": {
+          "median": 225538,
+          "min": 201256,
+          "max": 253262
+        },
+        "output": {
+          "median": 6969,
+          "min": 6754,
+          "max": 8285
+        },
+        "costUsd": {
+          "median": 2.2736149999999995,
+          "min": 2.0097294000000003,
+          "max": 2.8978179999999987
+        },
+        "seconds": {
+          "median": 173.956,
+          "min": 133.825,
+          "max": 297.431
+        }
+      },
+      "spendUsd": 11.630886399999998,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 2.3261772799999996,
+      "cacheReadShare": 0.9594162306256317,
+      "replay": {
+        "dir": "035-t5-ui-opus-2a10e3a4",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "011-t5-ui-opus-049e0cdf",
+          "pos": 11,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "023-t5-ui-opus-b5cea3e4",
+          "pos": 23,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "024-t5-ui-opus-dc6a18ab",
+          "pos": 24,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "027-t5-ui-opus-896a05d6",
+          "pos": 27,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "035-t5-ui-opus-2a10e3a4",
+          "pos": 35,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t5",
+      "mode": "webmcp",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": {
+        "scores": [
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "right": 40,
+        "total": 40,
+        "ungraded": 0
+      },
+      "stats": {
+        "turns": {
+          "median": 4,
+          "min": 3,
+          "max": 4
+        },
+        "input": {
+          "median": 10,
+          "min": 8,
+          "max": 10
+        },
+        "cacheRead": {
+          "median": 21290,
+          "min": 14640,
+          "max": 26633
+        },
+        "cacheWrite": {
+          "median": 12050,
+          "min": 11933,
+          "max": 13304
+        },
+        "output": {
+          "median": 2842,
+          "min": 2736,
+          "max": 2931
+        },
+        "costUsd": {
+          "median": 0.12073,
+          "min": 0.1173458,
+          "max": 0.1305066
+        },
+        "seconds": {
+          "median": 27.165,
+          "min": 25.278,
+          "max": 30.383
+        }
+      },
+      "spendUsd": 0.609903,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.1219806,
+      "cacheReadShare": 0.6156538040931104,
+      "replay": {
+        "dir": "005-t5-webmcp-opus-b457567b",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "005-t5-webmcp-opus-b457567b",
+          "pos": 5,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "014-t5-webmcp-opus-bc1a556a",
+          "pos": 14,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "018-t5-webmcp-opus-27f3a758",
+          "pos": 18,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "019-t5-webmcp-opus-6948e0ae",
+          "pos": 19,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "022-t5-webmcp-opus-7a5ea182",
+          "pos": 22,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t5",
+      "mode": "ui",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": {
+        "scores": [
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "right": 40,
+        "total": 40,
+        "ungraded": 0
+      },
+      "stats": {
+        "turns": {
+          "median": 47,
+          "min": 45,
+          "max": 55
+        },
+        "input": {
+          "median": 96,
+          "min": 92,
+          "max": 112
+        },
+        "cacheRead": {
+          "median": 7308501,
+          "min": 6155383,
+          "max": 8417190
+        },
+        "cacheWrite": {
+          "median": 293388,
+          "min": 256600,
+          "max": 307790
+        },
+        "output": {
+          "median": 19688,
+          "min": 16395,
+          "max": 21448
+        },
+        "costUsd": {
+          "median": 0.50610661,
+          "min": 0.42202984499999996,
+          "max": 0.54680576
+        },
+        "seconds": {
+          "median": 266.052,
+          "min": 224.167,
+          "max": 285.36
+        }
+      },
+      "spendUsd": 2.5122909,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.50245818,
+      "cacheReadShare": 0.9626618087426815,
+      "replay": {
+        "dir": "009-t5-ui-haiku-807a2ab9",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "009-t5-ui-haiku-807a2ab9",
+          "pos": 9,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "016-t5-ui-haiku-d51cc1ad",
+          "pos": 16,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "017-t5-ui-haiku-553e2037",
+          "pos": 17,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "021-t5-ui-haiku-e3e7635b",
+          "pos": 21,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "033-t5-ui-haiku-e015446b",
+          "pos": 33,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t5",
+      "mode": "webmcp",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": {
+        "scores": [
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "right": 40,
+        "total": 40,
+        "ungraded": 0
+      },
+      "stats": {
+        "turns": {
+          "median": 11,
+          "min": 6,
+          "max": 12
+        },
+        "input": {
+          "median": 24,
+          "min": 14,
+          "max": 26
+        },
+        "cacheRead": {
+          "median": 132194,
+          "min": 57087,
+          "max": 152263
+        },
+        "cacheWrite": {
+          "median": 18263,
+          "min": 16799,
+          "max": 19627
+        },
+        "output": {
+          "median": 8738,
+          "min": 7230,
+          "max": 9777
+        },
+        "costUsd": {
+          "median": 0.007389195,
+          "min": 0.007045575000000001,
+          "max": 0.008714854999999999
+        },
+        "seconds": {
+          "median": 43.967,
+          "min": 37.86,
+          "max": 58.599
+        }
+      },
+      "spendUsd": 0.038154485,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.007630897,
+      "cacheReadShare": 0.8574907161222577,
+      "replay": {
+        "dir": "013-t5-webmcp-haiku-72fc302f",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "006-t5-webmcp-haiku-07d0bd7a",
+          "pos": 6,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "010-t5-webmcp-haiku-fa8f1416",
+          "pos": 10,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "013-t5-webmcp-haiku-72fc302f",
+          "pos": 13,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "032-t5-webmcp-haiku-7107a737",
+          "pos": 32,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "036-t5-webmcp-haiku-3a4cc8e6",
+          "pos": 36,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1056 @@
+{
+  "set": "batch",
+  "generatedAt": "2026-10-12T16:12:27.243Z",
+  "revision": null,
+  "traceBase": null,
+  "seed": 20261009,
+  "runsPerCell": 5,
+  "dates": {
+    "first": "2026-10-10T07:05:21.236Z",
+    "last": "2026-10-10T07:20:56.228Z"
+  },
+  "versions": {
+    "chrome": [
+      "154.0.8037.98"
+    ],
+    "chromeDevtoolsMcp": [
+      "1.10.1"
+    ],
+    "anthropicSdk": [
+      "0.132.1"
+    ],
+    "node": [
+      "v26.8.2"
+    ],
+    "app": [
+      "800c5e5b7ec98f445aa12c99425b2cbc404ffdd1"
+    ],
+    "models": [
+      "claude-opus-5-5",
+      "claude-haiku-5-5"
+    ]
+  },
+  "cacheLeaks": [],
+  "cells": [
+    {
+      "task": "t1",
+      "mode": "ui",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 5,
+          "min": 3,
+          "max": 5
+        },
+        "input": {
+          "median": 12,
+          "min": 8,
+          "max": 12
+        },
+        "cacheRead": {
+          "median": 46343,
+          "min": 11503,
+          "max": 46380
+        },
+        "cacheWrite": {
+          "median": 20018,
+          "min": 16576,
+          "max": 20031
+        },
+        "output": {
+          "median": 740,
+          "min": 495,
+          "max": 824
+        },
+        "costUsd": {
+          "median": 0.124279,
+          "min": 0.09511259999999999,
+          "max": 0.125892
+        },
+        "seconds": {
+          "median": 13.702,
+          "min": 8.455,
+          "max": 15.999
+        }
+      },
+      "spendUsd": 0.5941986,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.11883972000000001,
+      "cacheReadShare": 0.6706403675786878,
+      "replay": {
+        "dir": "013-t1-ui-opus-cbef5b04",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "013-t1-ui-opus-cbef5b04",
+          "pos": 13,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "033-t1-ui-opus-4a9c805f",
+          "pos": 33,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "050-t1-ui-opus-4adf8672",
+          "pos": 50,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "054-t1-ui-opus-956561e8",
+          "pos": 54,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "057-t1-ui-opus-28b773e7",
+          "pos": 57,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t1",
+      "mode": "webmcp",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 2,
+          "min": 2,
+          "max": 3
+        },
+        "input": {
+          "median": 6,
+          "min": 6,
+          "max": 8
+        },
+        "cacheRead": {
+          "median": 3936,
+          "min": 3933,
+          "max": 8910
+        },
+        "cacheWrite": {
+          "median": 4982,
+          "min": 4979,
+          "max": 5316
+        },
+        "output": {
+          "median": 431,
+          "min": 361,
+          "max": 484
+        },
+        "costUsd": {
+          "median": 0.034336,
+          "min": 0.0329464,
+          "max": 0.038074
+        },
+        "seconds": {
+          "median": 6.388,
+          "min": 4.439,
+          "max": 9.922
+        }
+      },
+      "spendUsd": 0.1745432,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.034908640000000005,
+      "cacheReadShare": 0.4937705312074353,
+      "replay": {
+        "dir": "022-t1-webmcp-opus-c7c75bdb",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "022-t1-webmcp-opus-c7c75bdb",
+          "pos": 22,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "029-t1-webmcp-opus-5d24025b",
+          "pos": 29,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "037-t1-webmcp-opus-a9af3db3",
+          "pos": 37,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "046-t1-webmcp-opus-ccec29e8",
+          "pos": 46,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "059-t1-webmcp-opus-f6ba3551",
+          "pos": 59,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t1",
+      "mode": "ui",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 3,
+          "min": 3,
+          "max": 3
+        },
+        "input": {
+          "median": 8,
+          "min": 8,
+          "max": 8
+        },
+        "cacheRead": {
+          "median": 11507,
+          "min": 11499,
+          "max": 11511
+        },
+        "cacheWrite": {
+          "median": 16703,
+          "min": 16623,
+          "max": 16735
+        },
+        "output": {
+          "median": 690,
+          "min": 581,
+          "max": 872
+        },
+        "costUsd": {
+          "median": 0.0025387250000000004,
+          "min": 0.002489995,
+          "max": 0.002643785
+        },
+        "seconds": {
+          "median": 7.57,
+          "min": 6.743,
+          "max": 7.998
+        }
+      },
+      "spendUsd": 0.012764310000000001,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.0025528620000000004,
+      "cacheReadShare": 0.4080010212258966,
+      "replay": {
+        "dir": "001-t1-ui-haiku-5b6fe6e2",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "001-t1-ui-haiku-5b6fe6e2",
+          "pos": 1,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "015-t1-ui-haiku-a01d8e29",
+          "pos": 15,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "017-t1-ui-haiku-bb7f4153",
+          "pos": 17,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "039-t1-ui-haiku-30882c88",
+          "pos": 39,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "045-t1-ui-haiku-48466c18",
+          "pos": 45,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t1",
+      "mode": "webmcp",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 2,
+          "min": 2,
+          "max": 2
+        },
+        "input": {
+          "median": 6,
+          "min": 6,
+          "max": 6
+        },
+        "cacheRead": {
+          "median": 3932,
+          "min": 3930,
+          "max": 3935
+        },
+        "cacheWrite": {
+          "median": 4978,
+          "min": 4976,
+          "max": 4981
+        },
+        "output": {
+          "median": 442,
+          "min": 395,
+          "max": 463
+        },
+        "costUsd": {
+          "median": 0.00088317,
+          "min": 0.0008596699999999999,
+          "max": 0.0008933999999999999
+        },
+        "seconds": {
+          "median": 3.595,
+          "min": 3.471,
+          "max": 3.961
+        }
+      },
+      "spendUsd": 0.004403755,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.0008807509999999999,
+      "cacheReadShare": 0.4410128739963217,
+      "replay": {
+        "dir": "025-t1-webmcp-haiku-decb61f8",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "025-t1-webmcp-haiku-decb61f8",
+          "pos": 25,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "035-t1-webmcp-haiku-1db7818c",
+          "pos": 35,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "048-t1-webmcp-haiku-352af3c7",
+          "pos": 48,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "051-t1-webmcp-haiku-fd544350",
+          "pos": 51,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "052-t1-webmcp-haiku-ffb092b3",
+          "pos": 52,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t2",
+      "mode": "ui",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 5,
+          "min": 5,
+          "max": 5
+        },
+        "input": {
+          "median": 12,
+          "min": 12,
+          "max": 12
+        },
+        "cacheRead": {
+          "median": 48379,
+          "min": 48368,
+          "max": 48426
+        },
+        "cacheWrite": {
+          "median": 24235,
+          "min": 24191,
+          "max": 24236
+        },
+        "output": {
+          "median": 731,
+          "min": 628,
+          "max": 767
+        },
+        "costUsd": {
+          "median": 0.1455282,
+          "min": 0.1432366,
+          "max": 0.1462428
+        },
+        "seconds": {
+          "median": 10.532,
+          "min": 9.738,
+          "max": 13.943
+        }
+      },
+      "spendUsd": 0.725426,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.1450852,
+      "cacheReadShare": 0.6662499104984,
+      "replay": {
+        "dir": "007-t2-ui-opus-306d8852",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "007-t2-ui-opus-306d8852",
+          "pos": 7,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "016-t2-ui-opus-ba334300",
+          "pos": 16,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "023-t2-ui-opus-ce4a0564",
+          "pos": 23,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "049-t2-ui-opus-644d41bf",
+          "pos": 49,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "058-t2-ui-opus-e739207e",
+          "pos": 58,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t2",
+      "mode": "webmcp",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 4,
+          "min": 4,
+          "max": 5
+        },
+        "input": {
+          "median": 10,
+          "min": 10,
+          "max": 12
+        },
+        "cacheRead": {
+          "median": 13207,
+          "min": 13201,
+          "max": 18510
+        },
+        "cacheWrite": {
+          "median": 4963,
+          "min": 4961,
+          "max": 5463
+        },
+        "output": {
+          "median": 412,
+          "min": 395,
+          "max": 679
+        },
+        "costUsd": {
+          "median": 0.0357264,
+          "min": 0.0353864,
+          "max": 0.044645
+        },
+        "seconds": {
+          "median": 7.714,
+          "min": 5.557,
+          "max": 9.941
+        }
+      },
+      "spendUsd": 0.19008560000000002,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.03801712,
+      "cacheReadShare": 0.7370237209686751,
+      "replay": {
+        "dir": "000-t2-webmcp-opus-f195207a",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "000-t2-webmcp-opus-f195207a",
+          "pos": 0,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "002-t2-webmcp-opus-13a337ef",
+          "pos": 2,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "024-t2-webmcp-opus-285beafd",
+          "pos": 24,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "027-t2-webmcp-opus-d07f8c0a",
+          "pos": 27,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "055-t2-webmcp-opus-a9f73df3",
+          "pos": 55,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t2",
+      "mode": "ui",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 7,
+          "min": 6,
+          "max": 7
+        },
+        "input": {
+          "median": 16,
+          "min": 14,
+          "max": 16
+        },
+        "cacheRead": {
+          "median": 98528,
+          "min": 73824,
+          "max": 98907
+        },
+        "cacheWrite": {
+          "median": 30934,
+          "min": 28449,
+          "max": 31163
+        },
+        "output": {
+          "median": 1186,
+          "min": 1103,
+          "max": 1272
+        },
+        "costUsd": {
+          "median": 0.00540513,
+          "min": 0.0048477649999999995,
+          "max": 0.005479045000000001
+        },
+        "seconds": {
+          "median": 12.708,
+          "min": 11.384,
+          "max": 13.723
+        }
+      },
+      "spendUsd": 0.02614835,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.0052296700000000005,
+      "cacheReadShare": 0.7472345840262302,
+      "replay": {
+        "dir": "014-t2-ui-haiku-98703d88",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "003-t2-ui-haiku-69b26959",
+          "pos": 3,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "014-t2-ui-haiku-98703d88",
+          "pos": 14,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "036-t2-ui-haiku-660d8643",
+          "pos": 36,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "040-t2-ui-haiku-bfb9480f",
+          "pos": 40,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "041-t2-ui-haiku-4c446555",
+          "pos": 41,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t2",
+      "mode": "webmcp",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 4,
+          "min": 3,
+          "max": 4
+        },
+        "input": {
+          "median": 10,
+          "min": 8,
+          "max": 10
+        },
+        "cacheRead": {
+          "median": 13201,
+          "min": 8735,
+          "max": 13210
+        },
+        "cacheWrite": {
+          "median": 5063,
+          "min": 5013,
+          "max": 5091
+        },
+        "output": {
+          "median": 471,
+          "min": 441,
+          "max": 494
+        },
+        "costUsd": {
+          "median": 0.00098051,
+          "min": 0.0009551449999999999,
+          "max": 0.001006695
+        },
+        "seconds": {
+          "median": 4.738,
+          "min": 4.325,
+          "max": 5.516
+        }
+      },
+      "spendUsd": 0.004903225,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.000980645,
+      "cacheReadShare": 0.6928350421646545,
+      "replay": {
+        "dir": "009-t2-webmcp-haiku-08865b2d",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "008-t2-webmcp-haiku-18b36675",
+          "pos": 8,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "009-t2-webmcp-haiku-08865b2d",
+          "pos": 9,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "030-t2-webmcp-haiku-cea3d1bf",
+          "pos": 30,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "032-t2-webmcp-haiku-4916cdc3",
+          "pos": 32,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "047-t2-webmcp-haiku-27b6af3c",
+          "pos": 47,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t3",
+      "mode": "ui",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 10,
+          "min": 9,
+          "max": 12
+        },
+        "input": {
+          "median": 22,
+          "min": 20,
+          "max": 26
+        },
+        "cacheRead": {
+          "median": 197185,
+          "min": 165473,
+          "max": 258290
+        },
+        "cacheWrite": {
+          "median": 36045,
+          "min": 34729,
+          "max": 37986
+        },
+        "output": {
+          "median": 1996,
+          "min": 1935,
+          "max": 2103
+        },
+        "costUsd": {
+          "median": 0.267097,
+          "min": 0.25178039999999996,
+          "max": 0.2715444
+        },
+        "seconds": {
+          "median": 28.323,
+          "min": 26.687,
+          "max": 32.112
+        }
+      },
+      "spendUsd": 1.3137113999999999,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.26274228,
+      "cacheReadShare": 0.847116837013571,
+      "replay": {
+        "dir": "011-t3-ui-opus-e853b9d7",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "004-t3-ui-opus-609f836b",
+          "pos": 4,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "011-t3-ui-opus-e853b9d7",
+          "pos": 11,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "020-t3-ui-opus-2586023f",
+          "pos": 20,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "044-t3-ui-opus-90bc97a8",
+          "pos": 44,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "053-t3-ui-opus-6bfca72f",
+          "pos": 53,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t3",
+      "mode": "webmcp",
+      "model": "opus",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 4,
+          "min": 4,
+          "max": 5
+        },
+        "input": {
+          "median": 10,
+          "min": 10,
+          "max": 12
+        },
+        "cacheRead": {
+          "median": 14488,
+          "min": 14468,
+          "max": 20689
+        },
+        "cacheWrite": {
+          "median": 5825,
+          "min": 5801,
+          "max": 6366
+        },
+        "output": {
+          "median": 1303,
+          "min": 1198,
+          "max": 1328
+        },
+        "costUsd": {
+          "median": 0.058122599999999996,
+          "min": 0.0558986,
+          "max": 0.0625758
+        },
+        "seconds": {
+          "median": 17.065,
+          "min": 11.273,
+          "max": 65.252
+        }
+      },
+      "spendUsd": 0.2954436,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.05908872,
+      "cacheReadShare": 0.7373932740895627,
+      "replay": {
+        "dir": "012-t3-webmcp-opus-169c6f42",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "012-t3-webmcp-opus-169c6f42",
+          "pos": 12,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "021-t3-webmcp-opus-a7d2c501",
+          "pos": 21,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "026-t3-webmcp-opus-8701b1c0",
+          "pos": 26,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "038-t3-webmcp-opus-32f95c9e",
+          "pos": 38,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "043-t3-webmcp-opus-9771fed6",
+          "pos": 43,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t3",
+      "mode": "ui",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 13,
+          "min": 12,
+          "max": 16
+        },
+        "input": {
+          "median": 28,
+          "min": 26,
+          "max": 34
+        },
+        "cacheRead": {
+          "median": 342427,
+          "min": 248950,
+          "max": 494742
+        },
+        "cacheWrite": {
+          "median": 46462,
+          "min": 37378,
+          "max": 57033
+        },
+        "output": {
+          "median": 3706,
+          "min": 3670,
+          "max": 4176
+        },
+        "costUsd": {
+          "median": 0.01121777,
+          "min": 0.00901985,
+          "max": 0.013932944999999997
+        },
+        "seconds": {
+          "median": 32.954,
+          "min": 30.772,
+          "max": 35.596
+        }
+      },
+      "spendUsd": 0.056146234999999996,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.011229247,
+      "cacheReadShare": 0.880468539760816,
+      "replay": {
+        "dir": "005-t3-ui-haiku-9f5dbffc",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "005-t3-ui-haiku-9f5dbffc",
+          "pos": 5,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "006-t3-ui-haiku-b2f29c5f",
+          "pos": 6,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "028-t3-ui-haiku-7db42660",
+          "pos": 28,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "034-t3-ui-haiku-ee2b17a2",
+          "pos": 34,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "042-t3-ui-haiku-7ae460e1",
+          "pos": 42,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "task": "t3",
+      "mode": "webmcp",
+      "model": "haiku",
+      "counted": 5,
+      "successes": 5,
+      "groups": null,
+      "stats": {
+        "turns": {
+          "median": 4,
+          "min": 3,
+          "max": 8
+        },
+        "input": {
+          "median": 10,
+          "min": 8,
+          "max": 18
+        },
+        "cacheRead": {
+          "median": 14947,
+          "min": 8835,
+          "max": 40163
+        },
+        "cacheWrite": {
+          "median": 6564,
+          "min": 6456,
+          "max": 6748
+        },
+        "output": {
+          "median": 1906,
+          "min": 1822,
+          "max": 2084
+        },
+        "costUsd": {
+          "median": 0.00191472,
+          "min": 0.00180729,
+          "max": 0.002287055
+        },
+        "seconds": {
+          "median": 9.451,
+          "min": 8.454,
+          "max": 13.932
+        }
+      },
+      "spendUsd": 0.009875024999999999,
+      "unresolvedUsd": 0,
+      "spendPerSuccessUsd": 0.0019750049999999997,
+      "cacheReadShare": 0.727508864517193,
+      "replay": {
+        "dir": "010-t3-webmcp-haiku-dfb62715",
+        "failed": false
+      },
+      "attempts": [
+        {
+          "dir": "010-t3-webmcp-haiku-dfb62715",
+          "pos": 10,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "018-t3-webmcp-haiku-85442d74",
+          "pos": 18,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "019-t3-webmcp-haiku-adaf5097",
+          "pos": 19,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "031-t3-webmcp-haiku-bf692a78",
+          "pos": 31,
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "dir": "056-t3-webmcp-haiku-1ad4cd12",
+          "pos": 56,
+          "status": "pass",
+          "reason": null
+        }
+      ]
+    }
+  ]
+}

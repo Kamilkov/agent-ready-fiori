@@ -1,8 +1,8 @@
-<mvc:View controllerName="desk.Main" height="100%" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core">
+<mvc:View controllerName="desk.Main" height="100%" class="deskApp" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core">
   <NavContainer id="nav">
 
     <Page id="flightsPage" title="Disruption desk">
-      <FlexBox wrap="Wrap" alignItems="End" class="sapUiSmallMargin">
+      <FlexBox wrap="Wrap" alignItems="End" class="deskFilters">
         <VBox class="sapUiSmallMarginEnd">
           <Label text="From" labelFor="fromSelect"/>
           <Select id="fromSelect" selectedKey="{/filters/from}" items="{/airports}" change=".onFilter">
@@ -26,11 +26,12 @@
           </Select>
         </VBox>
       </FlexBox>
-      <Table id="flightsTable" headerText="Flights" items="{/rows}" noDataText="No flights match these filters">
+      <Table id="flightsTable" class="deskCard" headerText="Flights" items="{/rows}" noDataText="No flights match these filters">
         <columns>
           <Column><Text text="Flight"/></Column>
           <Column><Text text="Route"/></Column>
           <Column><Text text="Departs"/></Column>
+          <Column><Text text="Arrives"/></Column>
           <Column><Text text="Status"/></Column>
           <Column hAlign="End"><Text text="Free economy"/></Column>
           <Column hAlign="End"><Text text="Free business"/></Column>
@@ -40,46 +41,51 @@
             <Link text="{number}" press=".onOpenFlight"/>
             <Text text="{from} → {to}"/>
             <Text text="{path: 'departs', formatter: '.when'}"/>
+            <Text text="{path: 'arrives', formatter: '.when'}"/>
             <ObjectStatus text="{status}" state="{= ${status} === 'Cancelled' ? 'Error' : 'Success' }"/>
-            <Text text="{= ${status} === 'Cancelled' ? '–' : String(${free/Economy}) }"/>
-            <Text text="{= ${status} === 'Cancelled' ? '–' : String(${free/Business}) }"/>
+            <Text text="{= ${status} === 'Cancelled' ? '–' : String(${free/Economy}) }"><customData><core:CustomData key="seats" value="{= ${status} !== 'Cancelled' &amp;&amp; ${free/Economy} === 0 ? 'none' : 'some' }" writeToDom="true"/></customData></Text>
+            <Text text="{= ${status} === 'Cancelled' ? '–' : String(${free/Business}) }"><customData><core:CustomData key="seats" value="{= ${status} !== 'Cancelled' &amp;&amp; ${free/Business} === 0 ? 'none' : 'some' }" writeToDom="true"/></customData></Text>
           </ColumnListItem>
         </items>
       </Table>
     </Page>
 
     <Page id="detailPage" title="Flight {/selected/flight/number}" showNavButton="true" navButtonPress=".onBack" navButtonTooltip="Back to flights">
-      <VBox class="sapUiSmallMargin">
+      <VBox class="deskHeader">
         <Title text="{/selected/flight/number} · {/selected/flight/from} → {/selected/flight/to}" level="H2"/>
         <ObjectStatus title="Departs" text="{path: '/selected/flight/departs', formatter: '.when'}"/>
+        <ObjectStatus title="Arrives" text="{path: '/selected/flight/arrives', formatter: '.when'}"/>
         <ObjectStatus title="Status" text="{/selected/flight/status}" state="{= ${/selected/flight/status} === 'Cancelled' ? 'Error' : 'Success' }"/>
         <ObjectStatus title="Free economy" text="{= ${/selected/flight/status} === 'Cancelled' ? '–' : String(${/selected/flight/free/Economy}) }"/>
         <ObjectStatus title="Free business" text="{= ${/selected/flight/status} === 'Cancelled' ? '–' : String(${/selected/flight/free/Business}) }"/>
       </VBox>
-      <Table id="passengerTable" mode="MultiSelect" items="{/selected/passengers}" selectionChange=".onPassengerSelect" noDataText="No passengers on this flight">
+      <Table id="passengerTable" class="deskCard" mode="MultiSelect" items="{/selected/passengers}" selectionChange=".onPassengerSelect" noDataText="No passengers on this flight">
         <headerToolbar>
           <OverflowToolbar>
             <Title text="Passengers" level="H3"/>
             <ToolbarSpacer/>
             <Button text="Rebook…" type="Emphasized" press=".onOpenRebook"
               visible="{= ${/selected/flight/status} === 'Cancelled' }" enabled="{= ${/selection}.length > 0 }"/>
+            <Button text="Find connections" press=".onFindConnections" visible="{= ${/selected/flight/status} === 'Cancelled' }"/>
           </OverflowToolbar>
         </headerToolbar>
         <columns>
           <Column><Text text="Name"/></Column>
           <Column><Text text="Booking reference"/></Column>
           <Column><Text text="Cabin"/></Column>
+          <Column><Text text="Flights"/></Column>
         </columns>
         <items>
           <ColumnListItem>
             <Text text="{name}"/>
-            <Text text="{booking}"/>
-            <Text text="{cabin}"/>
+            <Text text="{booking}" class="deskRef"/>
+            <Text text="{cabin}"><customData><core:CustomData key="cabin" value="{cabin}" writeToDom="true"/></customData></Text>
+            <Text text="{path: 'flightIds', formatter: '.flightNumbers'}"/>
           </ColumnListItem>
         </items>
       </Table>
       <dependents>
-        <Dialog id="rebookDialog" title="{/dialog/title}" contentWidth="40rem">
+        <Dialog id="rebookDialog" class="deskApp" title="{/dialog/title}" contentWidth="40rem">
           <content>
             <MessageStrip text="{/dialog/error}" type="Error" showIcon="true" visible="{= !!${/dialog/error} }" class="sapUiSmallMargin"/>
             <Table id="targetTable" mode="SingleSelectLeft" headerText="Flights the rules allow" items="{/dialog/targets}"
@@ -94,8 +100,8 @@
                 <ColumnListItem>
                   <Text text="{number}"/>
                   <Text text="{path: 'departs', formatter: '.when'}"/>
-                  <Text text="{free/Economy}"/>
-                  <Text text="{free/Business}"/>
+                  <Text text="{free/Economy}"><customData><core:CustomData key="seats" value="{= ${free/Economy} === 0 ? 'none' : 'some' }" writeToDom="true"/></customData></Text>
+                  <Text text="{free/Business}"><customData><core:CustomData key="seats" value="{= ${free/Business} === 0 ? 'none' : 'some' }" writeToDom="true"/></customData></Text>
                 </ColumnListItem>
               </items>
             </Table>
@@ -104,6 +110,69 @@
           <endButton><Button text="Cancel" press=".onCancelRebook"/></endButton>
         </Dialog>
       </dependents>
+    </Page>
+
+    <Page id="connectionsPage" title="Connections for {/connect/flight/number}" showNavButton="true" navButtonPress=".onBack" navButtonTooltip="Back to the flight">
+      <VBox class="deskHeader">
+        <Title text="{/connect/flight/number} · {/connect/flight/from} → {/connect/flight/to}" level="H2"/>
+        <ObjectStatus title="Departs" text="{path: '/connect/flight/departs', formatter: '.when'}"/>
+        <ObjectStatus title="Status" text="{/connect/flight/status}" state="Error"/>
+      </VBox>
+      <Table id="connectionTable" class="deskCard" mode="SingleSelectLeft" items="{/connect/list}" selectionChange=".onConnectionSelect" noDataText="No connection the rules allow">
+        <headerToolbar>
+          <OverflowToolbar>
+            <Title text="Connections the rules allow" level="H3"/>
+            <ToolbarSpacer/>
+            <Label text="Cabin" labelFor="cabinFilter"/>
+            <SegmentedButton id="cabinFilter" selectedKey="{= ${/connect/cabin} || 'Any' }" selectionChange=".onCabinChange">
+              <items>
+                <SegmentedButtonItem key="Any" text="Any"/>
+                <SegmentedButtonItem key="Economy" text="Economy"/>
+                <SegmentedButtonItem key="Business" text="Business"/>
+              </items>
+            </SegmentedButton>
+          </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+          <Column width="65%"><Text text="Flights"/></Column>
+          <Column><Text text="Arrives"/></Column>
+          <Column hAlign="End"><Text text="Changes"/></Column>
+        </columns>
+        <items>
+          <ColumnListItem>
+            <VBox items="{path: 'flights', templateShareable: false}" class="deskLegs">
+              <Text text="{number} · {from} {path: 'departs', formatter: '.when'} → {to} {path: 'arrives', formatter: '.when'} · free: {free/Economy} economy, {free/Business} business"/>
+            </VBox>
+            <Text text="{path: 'arrives', formatter: '.when'}" class="deskStrong"/>
+            <Text text="{changes}" class="deskPill"/>
+          </ColumnListItem>
+        </items>
+      </Table>
+      <Table id="connectPassengerTable" class="deskCard" mode="MultiSelect" items="{/connect/passengers}" selectionChange=".onConnectPassengerSelect" noDataText="No passengers left to rebook">
+        <headerToolbar>
+          <OverflowToolbar><Title text="Passengers to rebook" level="H3"/></OverflowToolbar>
+        </headerToolbar>
+        <columns>
+          <Column><Text text="Name"/></Column>
+          <Column><Text text="Booking reference"/></Column>
+          <Column><Text text="Cabin"/></Column>
+        </columns>
+        <items>
+          <ColumnListItem>
+            <Text text="{name}"/>
+            <Text text="{booking}" class="deskRef"/>
+            <Text text="{cabin}"><customData><core:CustomData key="cabin" value="{cabin}" writeToDom="true"/></customData></Text>
+          </ColumnListItem>
+        </items>
+      </Table>
+      <footer>
+        <OverflowToolbar>
+          <ObjectStatus text="{/connect/error}" state="Error" icon="sap-icon://error" visible="{= !!${/connect/error} }"/>
+          <ToolbarSpacer/>
+          <Button text="Rebook onto connection" type="Emphasized" press=".onRebookConnection"
+            enabled="{= ${/connect/selection}.length > 0 &amp;&amp; ${/connect/chosen}.length > 0 }"/>
+        </OverflowToolbar>
+      </footer>
     </Page>
 
   </NavContainer>

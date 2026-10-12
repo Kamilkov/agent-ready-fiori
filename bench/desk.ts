@@ -4,10 +4,12 @@ import { fileURLToPath } from 'node:url'
 
 export type Cabin = 'Economy' | 'Business'
 export interface Flight {
-  id: string; number: string; from: string; to: string; departs: string
+  id: string; number: string; from: string; to: string; departs: string; arrives: string
   status: 'Scheduled' | 'Cancelled'; free: Record<Cabin, number>
 }
-export interface Passenger { id: string; name: string; booking: string; cabin: Cabin; flightId: string }
+export interface Passenger { id: string; name: string; booking: string; cabin: Cabin; flightIds: string[] }
+/** 1 to 3 flights in order; arrives is the last flight's arrival, changes the number of flights less one. */
+export interface Connection { flights: Flight[]; arrives: string; changes: number }
 export interface DeskData { flights: Flight[]; passengers: Passenger[] }
 export interface Filters { from: string; to: string; date: string; status: string }
 export type Result<T> = ({ ok: true } & T) | { ok: false; error: string }
@@ -16,6 +18,8 @@ export interface Rules {
   getFlight(d: DeskData, flightId: unknown): Result<{ flight: Flight; passengers: Passenger[] }>
   alternatives(d: DeskData, flightId: unknown, cabin?: unknown): Result<{ flights: Flight[] }>
   rebook(d: DeskData, input: unknown): Result<{ moved: number; to: string }>
+  connections(d: DeskData, flightId: unknown, cabin?: unknown): Result<{ cabin: Cabin | ''; connections: Connection[] }>
+  rebookConnection(d: DeskData, input: unknown): Result<{ moved: number; to: string[] }>
 }
 
 const require = createRequire(import.meta.url)
