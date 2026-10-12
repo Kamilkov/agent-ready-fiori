@@ -3,6 +3,9 @@
 A Fiori-style UI5 app ("Disruption desk") whose screens and WebMCP tools share the same rules, and a benchmark that
 runs Claude on the same tasks with and without WebMCP.
 
+The write-up: [WebMCP in a Fiori app: what happens when the job gets hard?](https://community.sap.com/t5/artificial-intelligence-blogs-posts/webmcp-in-a-fiori-app-what-happens-when-the-job-gets-hard/ba-p/14501806)
+(SAP Community). The results page: https://webmcp-test.machros.here.now/
+
 The app shows cancelled flights and their passengers. In both modes the agent gets the same browser tools through
 chrome-devtools-mcp: accessibility snapshots, clicks and typing. In WebMCP mode Chrome also lists the tools the page
 registers: `search_flights`, `get_flight`, `list_alternatives` and `rebook_passengers` (part 1), and
